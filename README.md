@@ -25,7 +25,15 @@ Developed by **[xboy](https://github.com/xbitoi)**.
 | 💾 **Backup / restore** | Export and import the whole configuration as JSON from the Web UI |
 | 🛡️ **Safety** | Restart/shutdown ask for confirmation; bot locked to your Chat ID; duplicate-tap protection |
 | 🌍 **Bilingual** | Full Arabic (RTL) / English in bot, Web UI, and docs |
+| 🎭 **Demonic / angelic themes** | Bat wings + rising embers (satanic) vs feathered wings + halo + falling light (angelic); one-click toggle, remembered |
 | 🐚 **Shells** | `cmd`, PowerShell, and Git Bash; each app can chain multiple commands |
+
+## Themes
+
+The Web UI ships with two animated themes, switchable with the 😇/😈 button
+(choice is remembered): **satanic** — bat wings with rising embers and
+"H3LL G4T3" branding; **angelic** — feathered wings, glowing halo, and falling
+motes of light with "ANGEL GATE" branding.
 
 ## Requirements
 
@@ -43,6 +51,7 @@ node server.js
 ```
 
 Open **http://localhost:3770** in your browser. Or double-click `run.bat`.
+A fresh install starts with 6 built-in Windows apps (Restart, Shutdown, Lock, Notepad, Calculator, Task Manager) — add yours from Telegram `/add` or the Web UI.
 To auto-start with Windows, run `install-startup.ps1` (no admin needed) or toggle it in the Web UI / Telegram 🔥 menu.
 
 ## Configure

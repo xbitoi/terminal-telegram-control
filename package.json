@@ -1,6 +1,6 @@
 {
   "name": "terminal-telegram-control",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "private": true,
   "description": "Control your Windows PC remotely via Telegram and Web UI: launch apps, screenshot, files, schedules, startup manager",
   "author": "xboy <https://github.com/xbitoi>",

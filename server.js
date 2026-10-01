@@ -10,6 +10,16 @@ const CONFIG_PATH = path.join(__dirname, 'config.json');
 const PUBLIC_DIR = path.join(__dirname, 'public');
 
 // ─── Config ──────────────────────────────────────────────────────────────
+// Built-in Windows apps: a fresh install (no config.json yet) starts with
+// these instead of an empty list. Users can add/edit/delete freely afterwards.
+const DEFAULT_APPS = [
+  { id: 'restartpc', name: 'Restart PC', commands: ['shutdown /r /t 3'], startup: false, shell: 'cmd' },
+  { id: 'shutdownpc', name: 'Shutdown', commands: ['shutdown /s /t 0'], startup: false, shell: 'cmd' },
+  { id: 'lockpc', name: 'Lock PC', commands: ['rundll32.exe user32.dll,LockWorkStation'], startup: false, shell: 'cmd' },
+  { id: 'notepad', name: 'Notepad', commands: ['notepad'], startup: false, shell: 'cmd' },
+  { id: 'calculator', name: 'Calculator', commands: ['calc'], startup: false, shell: 'cmd' },
+  { id: 'taskmgr', name: 'Task Manager', commands: ['taskmgr'], startup: false, shell: 'cmd' },
+];
 function loadConfig() {
   try {
     const cfg = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
@@ -25,7 +35,7 @@ function loadConfig() {
     cfg.schedules = (cfg.schedules || []).filter(s => s && s.id && s.appId && s.runAt);
     return cfg;
   } catch {
-    return { apps: [], telegram_token: '', telegram_chat_id: '', download_dir: path.join(os.homedir(), 'Downloads', 'TerminalRunner'), telegram_lang: 'ar', schedules: [] };
+    return { apps: JSON.parse(JSON.stringify(DEFAULT_APPS)), telegram_token: '', telegram_chat_id: '', download_dir: path.join(os.homedir(), 'Downloads', 'TerminalRunner'), telegram_lang: 'ar', schedules: [] };
   }
 }
 

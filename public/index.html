@@ -741,8 +741,65 @@
       }
     }
   </style>
+<style id="fx-theme">
+/* ─── Demonic / Angelic FX (wings + particles + halo) ─── */
+.fx-layer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.container{position:relative;z-index:1}
+.wing{position:absolute;top:46%;width:min(180px,13vw);opacity:0;transition:opacity .6s;transform:translateY(-50%);transform-origin:top center;animation:flap 5s ease-in-out infinite}
+.wing-left{left:6px}
+.wing-right{right:6px;transform:translateY(-50%) scaleX(-1)}
+html[data-theme="satanic"] .wing-demon{opacity:.85;filter:drop-shadow(0 0 18px rgba(255,59,31,.45))}
+html[data-theme="angelic"] .wing-angel{opacity:.9;filter:drop-shadow(0 0 18px rgba(232,182,76,.55))}
+@keyframes flap{0%,100%{rotate:-2deg}50%{rotate:2.5deg}}
+@media (max-width:1000px){.wing{display:none}}
+.fx-halo{position:absolute;top:64px;left:50%;width:130px;height:130px;transform:translateX(-50%);border-radius:50%;opacity:0;transition:opacity .6s}
+html[data-theme="angelic"] .fx-halo{opacity:.85;background:radial-gradient(circle,rgba(255,236,180,.32) 0%,rgba(255,236,180,.1) 45%,transparent 70%);border:2px solid rgba(232,182,76,.5);animation:halo 4s ease-in-out infinite}
+@keyframes halo{0%,100%{box-shadow:0 0 18px rgba(232,182,76,.3)}50%{box-shadow:0 0 46px rgba(232,182,76,.6)}}
+#fxp{position:absolute;inset:0}
+#fxp span{position:absolute;bottom:-12px;border-radius:50%;animation-timing-function:linear;animation-iteration-count:infinite}
+html[data-theme="satanic"] #fxp span{background:radial-gradient(circle,#ffb03a,#ff3b1f 60%,transparent 70%);animation-name:rise}
+html[data-theme="angelic"] #fxp span{background:radial-gradient(circle,#fff,#ffe9b0 55%,transparent 70%);animation-name:drift}
+@keyframes rise{to{transform:translateY(-106vh);opacity:0}}
+@keyframes drift{0%{transform:translateY(0);opacity:0}15%{opacity:.9}100%{transform:translateY(106vh) translateX(40px);opacity:0}}
+</style>
 </head>
 <body>
+<div class="fx-layer" aria-hidden="true">
+  <svg class="wing wing-left wing-demon" viewBox="0 0 200 260">
+    <path d="M182 252 C122 242 72 202 46 142 L18 58 L70 90 L86 28 L112 80 L152 24 L157 90 C177 122 187 182 182 252 Z" fill="rgba(22,5,5,.93)" stroke="#ff3b1f" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M182 252 C142 222 112 182 96 132" stroke="#ff3b1f" stroke-width="2" fill="none" opacity=".7"/>
+    <path d="M182 252 C152 236 122 212 102 177" stroke="#ff3b1f" stroke-width="1.5" fill="none" opacity=".45"/>
+  </svg>
+  <svg class="wing wing-right wing-demon" viewBox="0 0 200 260">
+    <path d="M182 252 C122 242 72 202 46 142 L18 58 L70 90 L86 28 L112 80 L152 24 L157 90 C177 122 187 182 182 252 Z" fill="rgba(22,5,5,.93)" stroke="#ff3b1f" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M182 252 C142 222 112 182 96 132" stroke="#ff3b1f" stroke-width="2" fill="none" opacity=".7"/>
+  </svg>
+  <svg class="wing wing-left wing-angel" viewBox="0 0 200 260">
+    <g fill="rgba(255,252,240,.95)" stroke="#e8b64c" stroke-width="2.5">
+      <ellipse cx="122" cy="192" rx="56" ry="58" transform="rotate(-25 122 192)"/>
+      <ellipse cx="92" cy="132" rx="41" ry="54" transform="rotate(-35 92 132)"/>
+      <ellipse cx="70" cy="76" rx="29" ry="44" transform="rotate(-40 70 76)"/>
+    </g>
+    <g stroke="#d9a441" stroke-width="1.5" opacity=".8">
+      <line x1="122" y1="150" x2="122" y2="235"/>
+      <line x1="92" y1="90" x2="92" y2="175"/>
+      <line x1="70" y1="42" x2="70" y2="110"/>
+    </g>
+  </svg>
+  <svg class="wing wing-right wing-angel" viewBox="0 0 200 260">
+    <g fill="rgba(255,252,240,.95)" stroke="#e8b64c" stroke-width="2.5">
+      <ellipse cx="122" cy="192" rx="56" ry="58" transform="rotate(-25 122 192)"/>
+      <ellipse cx="92" cy="132" rx="41" ry="54" transform="rotate(-35 92 132)"/>
+      <ellipse cx="70" cy="76" rx="29" ry="44" transform="rotate(-40 70 76)"/>
+    </g>
+    <g stroke="#d9a441" stroke-width="1.5" opacity=".8">
+      <line x1="122" y1="150" x2="122" y2="235"/>
+      <line x1="92" y1="90" x2="92" y2="175"/>
+    </g>
+  </svg>
+  <div class="fx-halo"></div>
+  <div id="fxp"></div>
+</div>
 <div class="container">
   <!-- Header -->
   <div class="header">
@@ -1993,6 +2050,33 @@ loadHistory();
 setInterval(loadSchedules, 30000);
 loadRunning();
 setInterval(loadRunning, 15000);
+</script>
+<script>
+// ─── Theme FX: particles follow the satanic/angelic theme ───
+(function(){
+  var box = document.getElementById('fxp');
+  if (!box) return;
+  function fxTheme(){
+    var t = document.documentElement.getAttribute('data-theme') || 'satanic';
+    box.innerHTML = '';
+    for (var i = 0; i < 24; i++){
+      var s = document.createElement('span');
+      var sz = (Math.random() * 5 + 2).toFixed(1);
+      s.style.width = s.style.height = sz + 'px';
+      s.style.left = (Math.random() * 100) + 'vw';
+      s.style.animationDuration = (Math.random() * 6 + 5).toFixed(1) + 's';
+      s.style.animationDelay = (-Math.random() * 10).toFixed(1) + 's';
+      if (t === 'angelic'){ s.style.top = '-12px'; s.style.bottom = 'auto'; }
+      else { s.style.bottom = '-12px'; s.style.top = 'auto'; }
+      box.appendChild(s);
+    }
+  }
+  try {
+    var _apply = window.applyTheme;
+    window.applyTheme = function(t){ _apply(t); fxTheme(); };
+  } catch(e){}
+  fxTheme();
+})();
 </script>
 </body>
 </html>

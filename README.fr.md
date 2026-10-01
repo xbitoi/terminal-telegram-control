@@ -25,7 +25,15 @@ Développé par **[xboy](https://github.com/xbitoi)**.
 | 💾 **Sauvegarde** | Exportez et importez toute la configuration en JSON depuis le Web |
 | 🛡️ **Sécurité** | Redémarrage/extinction avec confirmation ; bot verrouillé sur votre Chat ID ; protection anti-double-toucher |
 | 🌍 **Bilingue** | Arabe complet (RTL) / anglais dans le bot, l'UI et la doc |
+| 🎭 **Thèmes démoniaque / angélique** | Ailes de chauve-souris + braises montantes (démoniaque) contre ailes de plumes + halo + lumière descendante (angélique) ; bouton unique, choix mémorisé |
 | 🐚 **Shells** | `cmd`, PowerShell et Git Bash ; chaque appli peut enchaîner plusieurs commandes |
+
+## Thèmes
+
+L'interface Web propose deux thèmes animés, commutables avec le bouton 😇/😈
+(choix mémorisé) : **démoniaque** — ailes de chauve-souris avec braises
+montantes et marque « H3LL G4T3 » ; **angélique** — ailes de plumes, halo
+lumineux et lumière descendante avec la marque « ANGEL GATE ».
 
 ## Prérequis
 
@@ -43,6 +51,7 @@ node server.js
 ```
 
 Ouvrez **http://localhost:3770** dans le navigateur. Ou double-cliquez sur `run.bat`.
+Une installation fraîche démarre avec 6 applis Windows intégrées (Redémarrer, Éteindre, Verrouiller, Bloc-notes, Calculatrice, Gestionnaire des tâches) — ajoutez les vôtres depuis Telegram `/add` ou l'interface Web.
 Pour le démarrage auto avec Windows, exécutez `install-startup.ps1` (sans admin) ou activez-le depuis l'UI / le menu 🔥 de Telegram.
 
 ## Configuration

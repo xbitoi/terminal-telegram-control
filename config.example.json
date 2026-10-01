@@ -15,9 +15,30 @@
       "shell": "cmd"
     },
     {
+      "id": "lockpc",
+      "name": "Lock PC",
+      "commands": ["rundll32.exe user32.dll,LockWorkStation"],
+      "startup": false,
+      "shell": "cmd"
+    },
+    {
       "id": "notepad",
       "name": "Notepad",
       "commands": ["notepad"],
+      "startup": false,
+      "shell": "cmd"
+    },
+    {
+      "id": "calculator",
+      "name": "Calculator",
+      "commands": ["calc"],
+      "startup": false,
+      "shell": "cmd"
+    },
+    {
+      "id": "taskmgr",
+      "name": "Task Manager",
+      "commands": ["taskmgr"],
       "startup": false,
       "shell": "cmd"
     }
