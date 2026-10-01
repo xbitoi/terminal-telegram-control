@@ -3,7 +3,7 @@
 > **Remote-control your Windows PC from Telegram or a browser — 3 fixed actions only.**
 > Restart, shut down, or open Notepad. No free commands, no surprises.
 
-[⬅️ العربية](README.ar.md)
+[بالفصحى ⬅️](README.ar.md) · [بالدّارجة ⬅️](README.darija.md) · [Français ➡️](README.fr.md)
 
 ---
 
