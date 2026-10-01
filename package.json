@@ -1,8 +1,9 @@
 {
   "name": "terminal-telegram-control",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
-  "description": "Minimal Windows PC remote: restart, shutdown and notepad via Telegram + Web UI",
+  "description": "Control your Windows PC remotely via Telegram and Web UI: launch apps, screenshot, files, schedules, startup manager",
+  "author": "xboy <https://github.com/xbitoi>",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -10,5 +11,7 @@
   "engines": {
     "node": ">=18"
   },
-  "dependencies": {}
+  "dependencies": {
+    "playwright": "^1.61.0"
+  }
 }

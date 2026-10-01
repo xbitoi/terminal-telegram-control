@@ -1,7 +1,7 @@
 @echo off
 cd /d "%~dp0"
 echo ==========================================
-echo   Terminal Control - restart / shutdown / notepad
+echo   Terminal Runner - مشغل التطبيقات
 echo ==========================================
 echo.
 node server.js

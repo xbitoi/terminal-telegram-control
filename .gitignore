@@ -1,5 +1,6 @@
 node_modules/
 config.json
+config.backup.json
 history.json
 *.log
 .env

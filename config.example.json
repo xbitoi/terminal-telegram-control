@@ -1,5 +1,30 @@
 {
+  "apps": [
+    {
+      "id": "restartpc",
+      "name": "Restart PC",
+      "commands": ["shutdown /r /t 3"],
+      "startup": false,
+      "shell": "cmd"
+    },
+    {
+      "id": "shutdownpc",
+      "name": "Shutdown",
+      "commands": ["shutdown /s /t 0"],
+      "startup": false,
+      "shell": "cmd"
+    },
+    {
+      "id": "notepad",
+      "name": "Notepad",
+      "commands": ["notepad"],
+      "startup": false,
+      "shell": "cmd"
+    }
+  ],
   "telegram_token": "123456:PUT-YOUR-BOT-TOKEN-HERE",
   "telegram_chat_id": "123456789",
-  "telegram_lang": "ar"
+  "download_dir": "",
+  "telegram_lang": "ar",
+  "schedules": []
 }

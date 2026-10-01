@@ -1,63 +1,1998 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Terminal Control — التحكم بالحاسوب</title>
-<style>
-:root{--bg:#0f1420;--card:#1a2233;--txt:#e8edf5;--mut:#93a0b8;--acc:#4f8cff;--danger:#e5484d;--ok:#30a46c}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:Segoe UI,Tahoma,Arial,sans-serif}
-.wrap{max-width:720px;margin:0 auto;padding:24px 16px 64px}
-h1{font-size:22px;margin:8px 0 4px}.sub{color:var(--mut);font-size:14px;margin-bottom:20px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
-.card{background:var(--card);border:1px solid #26314a;border-radius:14px;padding:20px;text-align:center}
-.card .ic{font-size:36px}.card h3{margin:10px 0 6px;font-size:17px}.card p{color:var(--mut);font-size:13px;min-height:34px}
-button{cursor:pointer;border:0;border-radius:10px;padding:11px 18px;font-size:15px;font-weight:700;color:#fff;background:var(--acc)}
-button.danger{background:var(--danger)}button.ghost{background:transparent;border:1px solid #33415f}
-.set{background:var(--card);border:1px solid #26314a;border-radius:14px;padding:18px;margin-top:18px}
-label{display:block;font-size:13px;color:var(--mut);margin:10px 0 4px}
-input,select{width:100%;padding:10px;border-radius:9px;border:1px solid #33415f;background:#0d1322;color:var(--txt)}
-.row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:20px}
-.modal.open{display:flex}.box{background:var(--card);border-radius:14px;padding:24px;max-width:380px;width:100%;text-align:center}
-.status{margin-top:14px;font-size:13px;color:var(--mut)}
-.top{display:flex;justify-content:space-between;align-items:center}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>H3LL G4T3 - التحكم الشيطاني</title>
+  <style>
+    /* ─── Design tokens · satanic (dark, default) ─────────────────────
+       Warm charcoal surfaces, one ember accent, calm text tiers.
+       Spacing = 8pt scale · radius sm/md/lg · shadows sm/md · type scale. */
+    :root {
+      --bg-deep: #100d11;
+      --bg-surface: rgba(32, 27, 35, 0.72);
+      --bg-elevated: rgba(38, 32, 42, 0.82);
+      --bg-card: rgba(34, 29, 38, 0.6);
+      --bg-hover: rgba(48, 40, 54, 0.85);
+      --border: rgba(255, 255, 255, 0.09);
+      --border-hover: rgba(224, 122, 95, 0.45);
+      --accent: #cf5044;
+      --accent-soft: #e8836b;
+      --accent-glow: rgba(207, 80, 68, 0.22);
+      --accent-gradient: linear-gradient(135deg, #e0654f 0%, #b23a30 55%, #7e231f 100%);
+      --accent-warm: #e8a558;
+      --accent-warm-bg: rgba(232, 165, 88, 0.14);
+      --blue: #8fa3c8;
+      --blue-bg: rgba(143, 163, 200, 0.14);
+      --danger: #e0605e;
+      --danger-bg: rgba(224, 96, 94, 0.14);
+      --text-primary: #f4edeb;
+      --text-secondary: #c0b2af;
+      --text-muted: #8f817f;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      --shadow-card: 0 12px 36px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      --font-mono: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', Consolas, monospace;
+      --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, Tahoma, sans-serif;
+    }
+
+    /* ─── Design tokens · angelic (light) ───────────────────────────
+       Same geometry, soft blue on white. Identical variable names. */
+    [data-theme="angelic"] {
+      --bg-deep: #e9eef6;
+      --bg-surface: rgba(255, 255, 255, 0.78);
+      --bg-elevated: rgba(255, 255, 255, 0.9);
+      --bg-card: rgba(255, 255, 255, 0.66);
+      --bg-hover: #e6edf7;
+      --border: rgba(35, 70, 130, 0.14);
+      --border-hover: rgba(47, 111, 237, 0.45);
+      --accent: #2f6fed;
+      --accent-soft: #4a86f0;
+      --accent-glow: rgba(47, 111, 237, 0.16);
+      --accent-gradient: linear-gradient(135deg, #6ba0f5 0%, #2f6fed 55%, #1e4fc0 100%);
+      --accent-warm: #d98a2b;
+      --accent-warm-bg: rgba(217, 138, 43, 0.14);
+      --blue: #2f6fed;
+      --blue-bg: rgba(47, 111, 237, 0.12);
+      --danger: #d33f3f;
+      --danger-bg: rgba(211, 63, 63, 0.1);
+      --text-primary: #16233a;
+      --text-secondary: #4a5b75;
+      --text-muted: #8391a8;
+      --shadow-sm: 0 1px 2px rgba(23, 35, 58, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      --shadow-card: 0 14px 36px rgba(47, 80, 140, 0.14), 0 0 0 1px rgba(255, 255, 255, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+    [data-theme="angelic"] body, [data-theme="angelic"] .footer { color: var(--text-primary); }
+    [data-theme="angelic"] body::before { content: none; }
+    [data-theme="angelic"] .form-input { background: #fff; }
+    [data-theme="angelic"] .form-input::placeholder { color: #b6c6e2; }
+    [data-theme="angelic"] .cmd-field { background: rgba(255,255,255,0.7); }
+    [data-theme="angelic"] .footer { color: #93a7c9; }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Calm ambient wash — layered ember mesh, glass stage */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(55% 38% at 50% -4%, var(--accent-glow), transparent 70%),
+        radial-gradient(45% 32% at 88% 108%, rgba(224, 154, 79, 0.07), transparent 70%),
+        radial-gradient(40% 30% at 8% 100%, rgba(124, 141, 176, 0.06), transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    [data-theme="angelic"] body::before {
+      content: '';
+      background:
+        radial-gradient(55% 38% at 50% -4%, rgba(47, 111, 237, 0.12), transparent 70%),
+        radial-gradient(45% 32% at 90% 110%, rgba(91, 141, 239, 0.1), transparent 70%),
+        radial-gradient(40% 30% at 6% 100%, rgba(255, 255, 255, 0.7), transparent 70%);
+    }
+
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    :focus-visible {
+      outline: 2px solid var(--accent-soft);
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    .container {
+      max-width: 760px;
+      width: 100%;
+      padding: 24px 20px 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── Header ──────────────────────────────────────────────────── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 20px 24px;
+      margin-bottom: 32px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(18px) saturate(1.25);
+      -webkit-backdrop-filter: blur(18px) saturate(1.25);
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--accent-gradient);
+      opacity: 0.9;
+      box-shadow: 0 1px 12px var(--accent-glow);
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(40% 90% at 8% 0%, var(--accent-glow), transparent 70%);
+      pointer-events: none;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: var(--accent-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      box-shadow: 0 4px 16px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    .logo-text {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+      line-height: 1.35;
+    }
+    .logo-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+    .server-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      background: var(--danger);
+      box-shadow: 0 0 8px var(--danger);
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .status-dot.on { background: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
+    .status-dot.pulse { animation: pulse-dot 2s ease-in-out infinite; }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+
+    /* ─── Section Title ────────────────────────────────────────────── */
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 16px;
+      padding: 0 4px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ─── Card ─────────────────────────────────────────────────────── */
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-card);
+      transition: border-color 0.2s;
+      backdrop-filter: blur(16px) saturate(1.2);
+      -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    }
+    .card:focus-within { border-color: var(--border-hover); box-shadow: var(--shadow-card), 0 0 0 3px var(--accent-glow); }
+
+    /* ─── App Item ─────────────────────────────────────────────────── */
+    .app-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .app-item:last-child { margin-bottom: 0; }
+    .app-item:hover {
+      border-color: var(--border-hover);
+      box-shadow: var(--shadow-sm), 0 0 16px var(--accent-glow);
+      transform: translateY(-1px);
+    }
+    .app-number {
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      background: var(--bg-hover);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+      font-family: var(--font-mono);
+    }
+    .app-info { flex: 1; min-width: 0; }
+    .app-name {
+      font-size: 14px;
+      font-weight: 650;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .shell-badge {
+      display: inline-block;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 700;
+      line-height: 1.5;
+      margin-left: 4px;
+      border: 1px solid var(--border);
+    }
+    .shell-badge.cmd { background: var(--bg-hover); color: var(--text-secondary); }
+    .shell-badge.powershell { background: var(--blue-bg); color: var(--blue); }
+    .shell-badge.gitbash { background: var(--accent-glow); color: var(--accent-soft); }
+    .cmd-badge {
+      display: inline-block;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: var(--bg-hover);
+      color: var(--text-secondary);
+      font-weight: 700;
+      line-height: 1.5;
+      font-family: var(--font-mono);
+    }
+    .app-cmds { margin-top: 6px; display: flex; flex-direction: column; gap: 2px; }
+    .app-cmd-item {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 1px 0;
+    }
+    .app-cmd-item::before { content: "$ "; color: var(--accent-soft); font-weight: 600; }
+    .app-actions { display: flex; gap: 8px; flex-shrink: 0; align-items: center; }
+    .app-startup-toggle { margin: 0 2px; }
+    .app-startup-toggle .slider { width: 32px; height: 18px; }
+    .app-startup-toggle .slider::before { width: 14px; height: 14px; left: 2px; bottom: 2px; }
+    .app-startup-toggle input:checked + .slider::before { transform: translateX(14px); }
+
+    /* ─── Buttons · one language: 36px targets, soft hover ────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 36px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, box-shadow 0.15s, transform 0.1s, opacity 0.15s;
+      white-space: nowrap;
+      line-height: 1.4;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .btn-run {
+      background: var(--accent-gradient);
+      color: #fff;
+      box-shadow: 0 4px 14px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+    .btn-run:hover { filter: brightness(1.1); box-shadow: 0 6px 22px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.35); }
+
+    .btn-del {
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid transparent;
+    }
+    .btn-del:hover { border-color: var(--danger); }
+
+    .btn-edit {
+      background: var(--bg-hover);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      min-height: 36px;
+      padding: 8px 12px;
+    }
+    .btn-edit:hover { color: var(--text-primary); border-color: var(--border-hover); }
+
+    .btn-add {
+      background: transparent;
+      color: var(--accent-soft);
+      border: 1px dashed var(--border-hover);
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      justify-content: center;
+      font-size: 13px;
+    }
+    .btn-add:hover { background: var(--accent-glow); border-style: solid; }
+
+    .btn-save {
+      background: var(--accent-gradient);
+      color: #fff;
+      box-shadow: 0 4px 14px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      margin-top: 12px;
+      width: 100%;
+      padding: 12px;
+      justify-content: center;
+      font-size: 13px;
+    }
+    .btn-save:hover { filter: brightness(1.1); }
+
+    .btn-cancel {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      width: 100%;
+      padding: 11px;
+      margin-top: 8px;
+      justify-content: center;
+    }
+    .btn-cancel:hover { background: var(--bg-hover); color: var(--text-primary); }
+
+    /* ─── Forms ────────────────────────────────────────────────────── */
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .form-input {
+      width: 100%;
+      min-height: 40px;
+      padding: 10px 14px;
+      background: var(--bg-deep);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      direction: ltr;
+      text-align: left;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    [data-theme="angelic"] .form-input { background: #fff; }
+    .form-input:focus { border-color: var(--accent-soft); box-shadow: 0 0 0 3px var(--accent-glow); }
+    .form-input::placeholder { color: var(--text-muted); opacity: 0.8; }
+
+    /* ─── Multi-command form ───────────────────────────────────────── */
+    .cmd-field {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+    .cmd-field-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .cmd-field-header label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin: 0;
+    }
+    .cmd-field-remove {
+      background: none;
+      border: none;
+      color: var(--danger);
+      cursor: pointer;
+      font-size: 18px;
+      padding: 0 4px;
+      line-height: 1;
+      opacity: 0.6;
+      transition: opacity 0.15s;
+    }
+    .cmd-field-remove:hover { opacity: 1; }
+    .cmd-field-row { display: flex; gap: 8px; }
+    .cmd-input { flex: 1; }
+
+    /* ─── Toggle Switch ────────────────────────────────────────────── */
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .toggle-info { flex: 1; min-width: 0; }
+    .toggle-label { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+    .toggle-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: var(--bg-hover);
+      border-radius: 24px;
+      transition: 0.25s;
+    }
+    .slider::before {
+      content: "";
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      left: 3px;
+      bottom: 3px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      transition: 0.25s;
+    }
+    .switch input:checked + .slider { background: var(--accent); }
+    .switch input:checked + .slider::before { transform: translateX(20px); background: #fff; }
+
+    /* ─── Bot Status ───────────────────────────────────────────────── */
+    .status-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .status-cell {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+    }
+    .status-cell.full { grid-column: 1 / -1; }
+    .status-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .status-value {
+      color: var(--text-primary);
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .status-value.ltr { direction: ltr; text-align: left; }
+    .status-badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+    }
+    .status-badge.on { background: var(--accent-glow); color: var(--accent-soft); border-color: var(--border-hover); }
+    .status-badge.off { background: var(--danger-bg); color: var(--danger); }
+    .status-badge.wait { background: var(--accent-warm-bg); color: var(--accent-warm); }
+
+    /* ─── Modal ────────────────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .modal-overlay.show { opacity: 1; pointer-events: auto; }
+    .modal-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px 24px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      transform: scale(0.96) translateY(8px);
+      transition: transform 0.25s ease;
+      box-shadow: var(--shadow-card), 0 0 40px var(--accent-glow);
+      backdrop-filter: blur(22px) saturate(1.3);
+      -webkit-backdrop-filter: blur(22px) saturate(1.3);
+    }
+    .modal-overlay.show .modal-box { transform: scale(1) translateY(0); }
+    .modal-icon { font-size: 44px; margin-bottom: 16px; }
+    .modal-title { font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+    .modal-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 24px; }
+    .modal-actions { display: flex; gap: 10px; justify-content: center; }
+    .modal-btn {
+      padding: 10px 28px;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      min-width: 100px;
+    }
+    .modal-btn:active { transform: scale(0.97); }
+    .modal-btn.confirm {
+      background: linear-gradient(135deg, var(--danger), #dc2626);
+      color: #fff;
+      box-shadow: 0 3px 12px rgba(239, 68, 68, 0.3);
+    }
+    .modal-btn.confirm:hover { opacity: 0.9; box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4); }
+    .modal-btn.reject {
+      background: rgba(148, 163, 184, 0.08);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+    .modal-btn.reject:hover { background: rgba(148, 163, 184, 0.14); }
+
+    .modal-overlay.fade-out { opacity: 0; pointer-events: none; }
+    .modal-overlay.fade-out .modal-box { transform: scale(0.92); }
+
+    /* ─── Toast ────────────────────────────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-hover);
+      color: var(--text-primary);
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s;
+      box-shadow: var(--shadow-card);
+      max-width: calc(100vw - 40px);
+      text-align: center;
+      backdrop-filter: blur(16px) saturate(1.2);
+      -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+
+    /* ─── Utilities ────────────────────────────────────────────────── */
+    .sec-tools { margin-inline-start: auto; display: inline-flex; gap: 4px; align-items: center; }
+    .sec-btn { padding: 4px 8px !important; font-size: 10px !important; }
+    .sec-arrow { font-size: 10px; color: var(--text-muted); margin-inline-start: 4px; min-width: 14px; text-align: center; }
+    .empty-msg { text-align: center; color: var(--text-muted); font-size: 13px; padding: 28px 0; }
+    .hint { font-size: 11px; color: var(--text-secondary); margin-bottom: 8px; line-height: 1.7; }
+    .hint a { color: var(--accent-soft); text-decoration: none; font-weight: 600; }
+    .hint a:hover { text-decoration: underline; }
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      padding: 20px 0 8px;
+      margin-top: 16px;
+    }
+    .token-preview {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* ─── Form panel ───────────────────────────────────────────────── */
+    .form-panel {
+      display: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border-hover);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-card);
+    }
+    .form-panel.show { display: block; animation: slideIn 0.2s ease; }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .form-panel-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-soft);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ─── Send message ─────────────────────────────────────────────── */
+    .send-row {
+      display: flex;
+      gap: 8px;
+    }
+    .send-row .form-input { flex: 1; }
+    .btn-send {
+      background: var(--accent-gradient);
+      color: #fff;
+      box-shadow: 0 4px 14px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      min-height: 40px;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: filter 0.15s, transform 0.1s;
+      white-space: nowrap;
+    }
+    .btn-send:hover { filter: brightness(1.1); }
+    .btn-send:active { transform: scale(0.97); }
+    .btn-send:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    /* ─── Responsive ───────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .container { padding: 16px 12px 32px; }
+      .header { padding: 16px 18px; flex-direction: column; align-items: flex-start; gap: 12px; }
+      .card { padding: 16px; }
+      .app-item { flex-wrap: wrap; gap: 10px; }
+      .app-actions { width: 100%; justify-content: flex-end; flex-wrap: wrap; }
+      .btn { padding: 8px 12px; font-size: 11px; }
+      .status-grid { grid-template-columns: 1fr; }
+      .send-row { flex-direction: column; }
+      .send-row .form-input { width: 100%; }
+      .btn-send { width: 100%; justify-content: center; }
+    }
+
+    /* ─── Reduced motion ───────────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="top">
-    <div><h1 id="t-title">🖥️ التحكم بالحاسوب</h1><div class="sub" id="t-sub">3 إجراءات ثابتة فقط — بدون أوامر حرة</div></div>
-    <button class="ghost" onclick="toggleLang()" id="langBtn">EN</button>
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">⛧</div>
+      <div>
+        <div class="logo-text">H3LL G4T3 🔥</div>
+        <div class="logo-sub">التحكم الشيطاني / Satanic Control</div>
+      </div>
+    </div>
+    <div class="server-status">
+      <span id="uiscale-group" style="display:inline-flex;gap:6px;margin-inline-end:8px;align-items:center;" title="حجم الواجهة / UI size">
+        <span style="font-size:11px;">🔍</span>
+        <input type="range" id="uiscale-slider" min="70" max="140" step="5" value="100" oninput="setUiScaleNum(this.value)" style="width:90px;accent-color:var(--accent);cursor:pointer;">
+        <span id="uiscale-val" style="font-size:10px;font-weight:800;color:var(--accent-soft);font-family:var(--font-mono);min-width:36px;">100%</span>
+      </span>
+      <input type="color" id="accent-picker" value="#dc2626" onchange="applyAccent(this.value)" title="لون الواجهة / Accent color" style="width:30px;height:26px;border:1px solid var(--border);border-radius:6px;background:transparent;cursor:pointer;margin-inline-end:4px;padding:1px;">
+      <button class="btn btn-edit" onclick="resetAccent()" title="لون افتراضي / Default color" style="padding:7px 9px;margin-inline-end:4px;">🎨</button>
+      <button class="btn btn-edit" id="weblang-btn" onclick="toggleWebLang()" title="لغة الواجهة / UI language" style="padding:7px 9px;margin-inline-end:8px;">EN</button>
+      <button class="btn btn-edit" id="theme-btn" onclick="toggleTheme()" title="تبديل الثيم / Theme" style="margin-inline-end:8px;">😇 ملائكي</button>
+      <span id="server-dot" class="status-dot on pulse"></span>
+      <span>مباشر / Live</span>
+    </div>
   </div>
-  <div class="grid" id="actions"></div>
-  <div class="set">
-    <h3 id="t-set">⚙️ إعدادات تيليجرام</h3>
-    <label>Bot Token</label><input id="token" type="password" placeholder="123456:ABC...">
-    <label>Chat ID</label><input id="chat" inputmode="numeric" placeholder="123456789">
-    <label id="t-lang">اللغة</label>
-    <select id="lang"><option value="ar">العربية</option><option value="en">English</option></select>
-    <div class="row"><button onclick="save()" id="t-save">💾 حفظ وتشغيل البوت</button><span class="status" id="status"></span></div>
+
+  <!-- Apps Section -->
+  <div class="sec" id="sec-apps">
+  <div class="section-title" onclick="toggleSec('sec-apps')" style="cursor:pointer;user-select:none;"><span data-i18n="sec_apps">☠️ التطبيقات / Apps</span><span class="sec-tools"><button class="btn btn-edit sec-btn" onclick="moveSec(event,'sec-apps',-1)" title="↑">↑</button><button class="btn btn-edit sec-btn" onclick="moveSec(event,'sec-apps',1)" title="↓">↓</button><span class="sec-arrow" id="arrow-sec-apps">▼</span></span></div>
+  <div class="sec-body" id="body-sec-apps">
+  <div class="card" id="apps-card">
+    <div id="app-list"></div>
+    <button class="btn btn-add" onclick="showAddForm()">+ إضافة تطبيق / Add App</button>
+  </div>
+
+  <!-- Add / Edit Form Panel -->
+  <div class="form-panel" id="form-panel">
+    <div class="form-panel-title" id="form-title">✏️ إضافة تطبيق / Add App</div>
+    <input type="hidden" id="edit-id">
+    <div class="form-group">
+      <label>اسم التطبيق / App Name</label>
+      <input class="form-input" id="new-name" placeholder="مثال: OpenCode / e.g. OpenCode" style="direction:rtl;text-align:right;">
+    </div>
+    <div class="form-group">
+      <label>الطرفية / Shell</label>
+      <select class="form-input" id="new-shell" style="direction:rtl;">
+        <option value="cmd">💻 CMD (افتراضي)</option>
+        <option value="powershell">🪟 PowerShell</option>
+        <option value="gitbash">🐧 Git Bash</option>
+      </select>
+    </div>
+    <div id="cmd-fields-container">
+      <div class="cmd-field">
+        <div class="cmd-field-header">
+          <label>الأمر 1 / Command 1</label>
+        </div>
+        <div class="cmd-field-row">
+          <input class="form-input cmd-input" placeholder="مثال: notepad / e.g. notepad">
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-add" onclick="addCmdField()" style="margin-bottom:8px;padding:9px;">+ أضف أمراً آخر / Add Command</button>
+    <button class="btn btn-save" id="form-save-btn" onclick="addApp()">💾 حفظ / Save</button>
+    <button class="btn btn-cancel" onclick="hideAddForm()">إلغاء / Cancel</button>
+  </div>
+  </div><!-- /body-sec-apps -->
+  </div><!-- /sec-apps -->
+
+  <!-- Running processes -->
+  <div class="sec" id="sec-running">
+  <div class="section-title" onclick="toggleSec('sec-running')" style="cursor:pointer;user-select:none;"><span data-i18n="sec_running">🟢 المشتغلة / Running</span><span class="sec-tools"><button class="btn btn-edit sec-btn" onclick="moveSec(event,'sec-running',-1)" title="↑">↑</button><button class="btn btn-edit sec-btn" onclick="moveSec(event,'sec-running',1)" title="↓">↓</button><span class="sec-arrow" id="arrow-sec-running">▼</span></span></div>
+  <div class="sec-body" id="body-sec-running">
+  <div class="card">
+    <div class="hint" style="margin-bottom:10px;" data-i18n="running_hint">تطبيقات تعمل الآن (أوامر + بدء تلقائي) — أوقف أياً منها / Live apps (commands + startup) — stop any of them</div>
+    <div id="running-list"><div class="empty-msg">…</div></div>
+    <button class="btn btn-del" onclick="stopAllRunning()" style="width:100%;justify-content:center;margin-top:8px;">⏹ <span data-i18n="running_stop_all">إيقاف الكل / Stop all</span></button>
+  </div>
+  </div><!-- /body-sec-running -->
+  </div><!-- /sec-running -->
+
+  <!-- Startup with Windows -->
+  <div class="sec" id="sec-startup">
+  <div class="section-title" onclick="toggleSec('sec-startup')" style="cursor:pointer;user-select:none;"><span data-i18n="sec_startup">🔥 بدء التشغيل / Startup</span><span class="sec-tools"><button class="btn btn-edit sec-btn" onclick="moveSec(event,'sec-startup',-1)" title="↑">↑</button><button class="btn btn-edit sec-btn" onclick="moveSec(event,'sec-startup',1)" title="↓">↓</button><span class="sec-arrow" id="arrow-sec-startup">▼</span></span></div>
+  <div class="sec-body" id="body-sec-startup">
+  <div class="card">
+    <div id="startup-content">
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-label">مع ويندوز / With Windows</div>
+          <div class="toggle-desc">شغّل تلقائياً عند بدء تشغيل ويندوز / Launch automatically at startup</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="startup-toggle" onchange="toggleStartup()">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- /body-sec-startup -->
+  </div><!-- /sec-startup -->
+
+  <!-- Telegram group -->
+  <div class="sec" id="sec-telegram">
+  <!-- Telegram Settings -->
+  <div class="section-title" onclick="toggleSec('sec-telegram')" style="cursor:pointer;user-select:none;"><span data-i18n="sec_tg">🤖 التيليغرام / Telegram</span> <span class="hint" style="margin:0;" data-i18n="click_expand">(اضغط للتمديد / Click to expand)</span><span class="sec-tools"><button class="btn btn-edit sec-btn" onclick="moveSec(event,'sec-telegram',-1)" title="↑">↑</button><button class="btn btn-edit sec-btn" onclick="moveSec(event,'sec-telegram',1)" title="↓">↓</button><span class="sec-arrow" id="arrow-sec-telegram">▶</span></span></div>
+  <div class="sec-body" id="body-sec-telegram" style="display:none;">
+  <div id="tg-group">
+  <div class="card" id="tg-settings-card">
+    <div class="form-group">
+      <label>Bot Token</label>
+      <input class="form-input" id="tg-token" dir="ltr" placeholder="123456:ABC...">
+    </div>
+    <div class="form-group">
+      <label>Chat ID / معرف المحادثة</label>
+      <input class="form-input" id="tg-chat" dir="ltr" placeholder="123456789">
+    </div>
+    <div class="form-group">
+      <label>📁 مجلد حفظ الملفات / Save folder</label>
+      <div class="send-row" style="margin-bottom:8px;">
+        <input class="form-input" id="tg-downdir" dir="ltr" placeholder="C:\Users\...\Downloads\TerminalRunner">
+        <button class="btn-send" id="pick-dir-btn" onclick="openDirPicker()">📁 اختر / Browse</button>
+      </div>
+      <div class="hint" id="pick-dir-hint" style="display:none;">⏳ نافذة اختيار المجلد مفتوحة على شاشتك... / Folder window open on your screen...</div>
+    </div>
+    <div class="hint" id="downdir-hint">تُحفظ ملفات التيليجرام الواردة هنا / Incoming Telegram files are saved here.</div>
+    <div class="hint">
+      اترك الحقول فارغة إن لم تستخدم البوت / Leave empty if not using the bot.
+      <a href="https://t.me/BotFather" target="_blank">BotFather</a>
+    </div>
+    <button class="btn btn-save" onclick="saveSettings()">💾 حفظ الإعدادات / Save Settings</button>
+  </div>
+
+  <!-- Bot Status -->
+  <div class="card">
+    <div class="status-grid" id="bot-status-content">
+      <div class="status-cell full" style="text-align:center;color:var(--text-muted);padding:16px 0;">
+        جاري التحميل... / Loading...
+      </div>
+    </div>
+  </div>
+
+  <!-- Send via Bot -->
+  <div class="card">
+    <div class="hint" style="margin-bottom:10px;">
+      ✉️ يُرسل إلى معرف المحادثة المحفوظ / Sends to saved Chat ID
+    </div>
+    <div class="send-row">
+      <input class="form-input" id="send-text" placeholder="اكتب الرسالة هنا... / Type your message..." style="direction:rtl;text-align:right;">
+      <button class="btn-send" onclick="sendBotMessage()">📨 إرسال / Send</button>
+    </div>
+  </div>
+  </div><!-- /tg-group -->
+
+  </div><!-- /tg-group -->
+  </div><!-- /body-sec-telegram -->
+  </div><!-- /sec-telegram -->
+
+  <!-- Screenshot -->
+  <div class="sec" id="sec-shot">
+  <div class="section-title" onclick="toggleSec('sec-shot')" style="cursor:pointer;user-select:none;"><span data-i18n="sec_shot">📸 الشاشة / Screenshot</span><span class="sec-tools"><button class="btn btn-edit sec-btn" onclick="moveSec(event,'sec-shot',-1)" title="↑">↑</button><button class="btn btn-edit sec-btn" onclick="moveSec(event,'sec-shot',1)" title="↓">↓</button><span class="sec-arrow" id="arrow-sec-shot">▼</span></span></div>
+  <div class="sec-body" id="body-sec-shot">
+  <div class="card">
+    <div class="hint" style="margin-bottom:10px;">لقطة حية لشاشة الحاسوب / Live PC screen</div>
+    <div class="send-row" style="margin-bottom:10px;">
+      <button class="btn-send" id="shot-btn" onclick="takeScreenshotWeb()" style="width:100%;justify-content:center;">📸 التقاط سكرين شوت / Capture</button>
+    </div>
+    <div class="hint" id="shot-status" style="display:none;margin-bottom:8px;">⏳ جاري التقاط شاشة... / Capturing screen...</div>
+    <img id="screen-preview" alt="screenshot" style="display:none;width:100%;border-radius:10px;border:1px solid var(--border);">
+  </div>
+  </div><!-- /body-sec-shot -->
+  </div><!-- /sec-shot -->
+
+  <!-- Send to Telegram -->
+  <div class="sec" id="sec-send">
+  <div class="section-title" onclick="toggleSec('sec-send')" style="cursor:pointer;user-select:none;"><span data-i18n="sec_send">📤 إرسال للتيليجرام / Send to Telegram</span><span class="sec-tools"><button class="btn btn-edit sec-btn" onclick="moveSec(event,'sec-send',-1)" title="↑">↑</button><button class="btn btn-edit sec-btn" onclick="moveSec(event,'sec-send',1)" title="↓">↓</button><span class="sec-arrow" id="arrow-sec-send">▼</span></span></div>
+  <div class="sec-body" id="body-sec-send">
+  <div class="card">
+    <div class="hint" style="margin-bottom:8px;">⚠️ الحجم الأقصى <b>45MB</b> لكل ملف (حد التيليجرام) / Max <b>45MB</b> per file</div>
+    <div id="tg-drop" style="border:2px dashed var(--border-hover);border-radius:12px;padding:22px;text-align:center;color:var(--text-secondary);font-size:13px;margin-bottom:8px;">
+      ⬇ أسقط ملفاً هنا من حاسوبك لإرساله إلى هاتفك / Drop a file here to send it to your phone
+    </div>
+    <div class="send-row">
+      <input type="file" id="tg-file" class="form-input" style="padding:8px;" onchange="validateTgFile(this)">
+      <button class="btn-send" id="tg-send-btn" onclick="sendFileToTelegram()">📤 إرسال / Send</button>
+    </div>
+    <div id="tg-send-box" style="display:none;margin-top:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span id="tg-send-label" style="font-size:12px;color:var(--text-secondary);">⏳ جاري الإرسال...</span>
+        <span id="tg-send-pct" style="font-size:12px;font-weight:800;color:var(--accent-soft);font-family:var(--font-mono);">0%</span>
+      </div>
+      <div style="height:10px;border-radius:6px;background:var(--bg-hover);overflow:hidden;border:1px solid var(--border);">
+        <div id="tg-send-bar" style="height:100%;width:0%;background:var(--accent-gradient);transition:width 0.15s;"></div>
+      </div>
+      <button class="btn btn-del" id="tg-cancel-btn" onclick="cancelTgSend()" style="width:100%;justify-content:center;margin-top:8px;">⏹ إيقاف الإرسال / Cancel</button>
+    </div>
+    <div class="hint" id="tg-send-err" style="display:none;margin-top:8px;color:var(--danger);">❌</div>
+  </div>
+  </div><!-- /body-sec-send -->
+  </div><!-- /sec-send -->
+
+  <!-- Scheduler -->
+  <div class="sec" id="sec-sched">
+  <div class="section-title" onclick="toggleSec('sec-sched')" style="cursor:pointer;user-select:none;"><span data-i18n="sec_sched">⏰ المجدول / Scheduler</span><span class="sec-tools"><button class="btn btn-edit sec-btn" onclick="moveSec(event,'sec-sched',-1)" title="↑">↑</button><button class="btn btn-edit sec-btn" onclick="moveSec(event,'sec-sched',1)" title="↓">↓</button><span class="sec-arrow" id="arrow-sec-sched">▼</span></span></div>
+  <div class="sec-body" id="body-sec-sched">
+  <div class="card">
+    <div class="hint" style="margin-bottom:8px;" data-i18n="sched_hint">شغّل تطبيقاً بعد مدة — يبقى حتى بعد إعادة التشغيل / Run an app later — survives restarts</div>
+    <div class="send-row" style="margin-bottom:8px;">
+      <select class="form-input" id="sched-app" style="direction:rtl;"></select>
+      <input class="form-input" id="sched-min" type="number" min="1" max="10080" value="30" dir="ltr" style="max-width:110px;" title="minutes">
+      <button class="btn-send" onclick="addSchedule()">⏰ <span data-i18n="sched_add">جدولة / Schedule</span></button>
+    </div>
+    <div class="hint" style="margin-bottom:8px;" data-i18n="sched_min">الدقائق / Minutes</div>
+    <div id="sched-list"></div>
+  </div>
+  </div><!-- /body-sec-sched -->
+  </div><!-- /sec-sched -->
+
+  <!-- History -->
+  <div class="sec" id="sec-hist">
+  <div class="section-title" onclick="toggleSec('sec-hist')" style="cursor:pointer;user-select:none;"><span data-i18n="sec_hist">🕘 السجل / History</span><span class="sec-tools"><button class="btn btn-edit sec-btn" onclick="moveSec(event,'sec-hist',-1)" title="↑">↑</button><button class="btn btn-edit sec-btn" onclick="moveSec(event,'sec-hist',1)" title="↓">↓</button><span class="sec-arrow" id="arrow-sec-hist">▼</span></span></div>
+  <div class="sec-body" id="body-sec-hist">
+  <div class="card">
+    <div id="hist-list"></div>
+    <button class="btn btn-del" onclick="clearHistory()" style="width:100%;justify-content:center;margin-top:8px;">🗑 <span data-i18n="hist_clear">مسح السجل / Clear</span></button>
+  </div>
+  </div><!-- /body-sec-hist -->
+  </div><!-- /sec-hist -->
+
+  <!-- Backup -->
+  <div class="sec" id="sec-backup">
+  <div class="section-title" onclick="toggleSec('sec-backup')" style="cursor:pointer;user-select:none;"><span data-i18n="sec_backup">💾 النسخ الاحتياطي / Backup</span><span class="sec-tools"><button class="btn btn-edit sec-btn" onclick="moveSec(event,'sec-backup',-1)" title="↑">↑</button><button class="btn btn-edit sec-btn" onclick="moveSec(event,'sec-backup',1)" title="↓">↓</button><span class="sec-arrow" id="arrow-sec-backup">▼</span></span></div>
+  <div class="sec-body" id="body-sec-backup">
+  <div class="card">
+    <div class="send-row" style="margin-bottom:8px;">
+      <a class="btn-send" href="/api/backup" style="text-decoration:none;flex:1;justify-content:center;">⬇ <span data-i18n="backup_export">تصدير / Export</span></a>
+      <input type="file" id="restore-file" accept=".json" class="form-input" style="padding:8px;">
+      <button class="btn-send" onclick="importBackup()">⬆ <span data-i18n="backup_import">استيراد / Import</span></button>
+    </div>
+    <div class="hint" data-i18n="backup_hint">الاستيراد يحفظ نسخة من الحالي في config.backup.json أولاً / Import backs up current to config.backup.json first</div>
+  </div>
+  </div><!-- /body-sec-backup -->
+  </div><!-- /sec-backup -->
+
+  <!-- Quick actions -->
+  <div class="sec" id="sec-quick">
+  <div class="section-title" onclick="toggleSec('sec-quick')" style="cursor:pointer;user-select:none;"><span data-i18n="sec_quick">⚡ إجراءات سريعة / Quick actions</span><span class="sec-tools"><button class="btn btn-edit sec-btn" onclick="moveSec(event,'sec-quick',-1)" title="↑">↑</button><button class="btn btn-edit sec-btn" onclick="moveSec(event,'sec-quick',1)" title="↓">↓</button><span class="sec-arrow" id="arrow-sec-quick">▼</span></span></div>
+  <div class="sec-body" id="body-sec-quick">
+  <div class="card">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <button class="btn btn-edit" onclick="quickAction('lock')" style="justify-content:center;padding:12px;">🔒 <span data-i18n="q_lock">قفل / Lock</span></button>
+      <button class="btn btn-edit" onclick="quickAction('recycle')" style="justify-content:center;padding:12px;">🗑 <span data-i18n="q_recycle">السلة / Recycle</span></button>
+      <button class="btn btn-edit" onclick="quickAction('desktop')" style="justify-content:center;padding:12px;">🖥 <span data-i18n="q_desktop">سطح المكتب / Desktop</span></button>
+      <button class="btn btn-edit" onclick="quickAction('taskmgr')" style="justify-content:center;padding:12px;">📊 <span data-i18n="q_taskmgr">المهام / Task Mgr</span></button>
+    </div>
+  </div>
+  </div><!-- /body-sec-quick -->
+  </div><!-- /sec-quick -->
+
+  <!-- Footer -->
+  <div class="footer">
+    Terminal Telegram Control · المنفذ 3770
   </div>
 </div>
-<div class="modal" id="modal"><div class="box">
-  <h3 id="m-title"></h3><p class="sub" id="m-sub"></p>
-  <div class="row" style="justify-content:center"><button class="danger" id="m-ok">تأكيد</button><button class="ghost" onclick="closeM()">إلغاء</button></div>
-</div></div>
+
+<!-- Confirm Modal -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal-box">
+    <div class="modal-icon">⚠️</div>
+    <div class="modal-title" id="modal-title">تأكيد / Confirm</div>
+    <div class="modal-desc" id="modal-desc">سيتم إعادة التشغيل فوراً!<br>This will restart immediately!</div>
+    <div class="modal-actions">
+      <button class="modal-btn reject" id="modal-reject">❌ رفض / Reject</button>
+      <button class="modal-btn confirm" id="modal-confirm">✅ تأكيد / Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script>
-let LANG='ar', PENDING=null;
-const STR={ar:{restart:'إعادة تشغيل الحاسوب',shutdown:'إطفاء الحاسوب',notepad:'فتح المفكرة',rd:'إعادة التشغيل بعد 3 ثوانٍ',sd:'سيتم الإطفاء فوراً',np:'يفتح نافذة Notepad على الحاسوب',run:'▶ تشغيل',confirmT:'تأكيد الإجراء',confirmS:'هل أنت متأكد؟ لا يمكن التراجع.',confirm:'تأكيد',cancel:'إلغاء',save:'💾 حفظ وتشغيل البوت',done:'✅ تم التنفيذ',saved:'✅ تم الحفظ — البوت يعمل',err:'❌ خطأ في الاتصال'},en:{restart:'Restart PC',shutdown:'Shutdown',notepad:'Open Notepad',rd:'Restarts after 3 seconds',sd:'Powers off immediately',np:'Opens a Notepad window on the PC',run:'▶ Run',confirmT:'Confirm action',confirmS:'Are you sure? This cannot be undone.',confirm:'Confirm',cancel:'Cancel',save:'💾 Save & start bot',done:'✅ Done',saved:'✅ Saved — bot running',err:'❌ Connection error'}};
-const T=k=>STR[LANG][k];
-async function load(){const r=await fetch('/api/actions').then(r=>r.json());const box=document.getElementById('actions');box.innerHTML='';const desc={restart:T('rd'),shutdown:T('sd'),notepad:T('np')};for(const a of r.actions){const d=document.createElement('div');d.className='card';d.innerHTML=`<div class="ic">${a.icon}</div><h3>${LANG==='ar'?a.name_ar:a.name}</h3><p>${desc[a.key]}</p>`;const b=document.createElement('button');b.textContent=T('run');if(a.confirm)b.className='danger';b.onclick=()=>a.confirm?ask(a):doRun(a.key);d.appendChild(b);box.appendChild(d);}const s=await fetch('/api/settings').then(r=>r.json());document.getElementById('chat').value=s.telegram_chat_id||'';document.getElementById('lang').value=s.telegram_lang||'ar';if((s.telegram_lang||'ar')!==LANG){LANG=s.telegram_lang;applyLang();load();}}
-function ask(a){PENDING=a.key;document.getElementById('m-title').textContent=T('confirmT');document.getElementById('m-sub').textContent=(LANG==='ar'?a.name_ar:a.name)+' — '+T('confirmS');document.getElementById('m-ok').textContent=T('confirm');document.getElementById('modal').classList.add('open');}
-function closeM(){document.getElementById('modal').classList.remove('open');PENDING=null;}
-document.getElementById('m-ok').onclick=async()=>{if(PENDING){await doRun(PENDING);}closeM();};
-async function doRun(key){try{await fetch('/api/actions/'+key+'/run',{method:'POST'});flash(T('done'));}catch{flash(T('err'));}}
-async function save(){const body={telegram_chat_id:document.getElementById('chat').value.trim(),telegram_lang:document.getElementById('lang').value};const tk=document.getElementById('token').value.trim();if(tk)body.telegram_token=tk;try{await fetch('/api/settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});LANG=body.telegram_lang;applyLang();flash(T('saved'));}catch{flash(T('err'));}}
-function flash(m){document.getElementById('status').textContent=m;setTimeout(()=>document.getElementById('status').textContent='',3000);}
-function toggleLang(){LANG=LANG==='ar'?'en':'ar';applyLang();load();}
-function applyLang(){document.documentElement.lang=LANG;document.documentElement.dir=LANG==='ar'?'rtl':'ltr';document.getElementById('langBtn').textContent=LANG==='ar'?'EN':'عربي';document.getElementById('t-title').textContent=LANG==='ar'?'🖥️ التحكم بالحاسوب':'🖥️ Terminal Control';document.getElementById('t-sub').textContent=LANG==='ar'?'3 إجراءات ثابتة فقط — بدون أوامر حرة':'Only 3 fixed actions — no free commands';document.getElementById('t-set').textContent=LANG==='ar'?'⚙️ إعدادات تيليجرام':'⚙️ Telegram settings';document.getElementById('t-lang').textContent=LANG==='ar'?'اللغة':'Language';document.getElementById('t-save').textContent=T('save');}
-applyLang();load();
+const API = '';
+
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  try { localStorage.setItem('tr_theme', t); } catch {}
+  const b = document.getElementById('theme-btn');
+  if (b) b.textContent = t === 'angelic' ? '😈 شيطاني' : '😇 ملائكي';
+  const logo = document.querySelector('.logo-text');
+  const sub = document.querySelector('.logo-sub');
+  if (logo && sub) {
+    if (t === 'angelic') { logo.textContent = 'ANGEL GATE ☁️'; sub.textContent = 'التحكم الملائكي / Angelic Control'; document.title = 'ANGEL GATE - التحكم الملائكي'; }
+    else { logo.textContent = 'H3LL G4T3 🔥'; sub.textContent = 'التحكم الشيطاني / Satanic Control'; document.title = 'H3LL G4T3 - التحكم الشيطاني'; }
+  }
+}
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme') || 'satanic';
+  applyTheme(cur === 'angelic' ? 'satanic' : 'angelic');
+}
+try { applyTheme(localStorage.getItem('tr_theme') || 'satanic'); } catch { applyTheme('satanic'); }
+
+function setUiScaleNum(v) {
+  v = Math.max(70, Math.min(140, Number(v) || 100));
+  document.body.style.zoom = v / 100;
+  const lbl = document.getElementById('uiscale-val');
+  if (lbl) lbl.textContent = v + '%';
+  const s = document.getElementById('uiscale-slider');
+  if (s && Number(s.value) !== v) s.value = v;
+  try { localStorage.setItem('tr_uiscale', String(v)); } catch {}
+}
+try { setUiScaleNum(localStorage.getItem('tr_uiscale') || 100); } catch { setUiScaleNum(100); }
+
+// ─── Sections: collapse + reorder (persisted) ─────────────────────
+const SEC_IDS = ['sec-apps','sec-running','sec-startup','sec-telegram','sec-shot','sec-send','sec-sched','sec-hist','sec-backup','sec-quick'];
+function getCollapsed() {
+  try { return JSON.parse(localStorage.getItem('tr_sec_collapsed') || '{}'); } catch { return {}; }
+}
+function toggleSec(id, force) {
+  const body = document.getElementById('body-' + id);
+  const arrow = document.getElementById('arrow-' + id);
+  if (!body) return;
+  const show = force !== undefined ? force : (body.style.display === 'none');
+  body.style.display = show ? 'block' : 'none';
+  if (arrow) arrow.textContent = show ? '▼' : '▶';
+  const c = getCollapsed();
+  if (show) delete c[id]; else c[id] = 1;
+  try { localStorage.setItem('tr_sec_collapsed', JSON.stringify(c)); } catch {}
+}
+function moveSec(ev, id, dir) {
+  ev.stopPropagation();
+  const order = getSecOrder();
+  const i = order.indexOf(id);
+  const j = i + dir;
+  if (i < 0 || j < 0 || j >= order.length) return;
+  [order[i], order[j]] = [order[j], order[i]];
+  try { localStorage.setItem('tr_sec_order', JSON.stringify(order)); } catch {}
+  applySecOrder();
+}
+function getSecOrder() {
+  try {
+    const o = JSON.parse(localStorage.getItem('tr_sec_order') || '[]');
+    if (Array.isArray(o) && o.length) {
+      const full = [...o.filter(x => SEC_IDS.includes(x)), ...SEC_IDS.filter(x => !o.includes(x))];
+      return full;
+    }
+  } catch {}
+  return [...SEC_IDS];
+}
+function applySecOrder() {
+  const container = document.querySelector('.container');
+  const order = getSecOrder();
+  const footers = [...container.querySelectorAll('.footer')];
+  for (const id of order) {
+    const el = document.getElementById(id);
+    if (el) container.insertBefore(el, footers[0] || null);
+  }
+  const c = getCollapsed();
+  for (const id of SEC_IDS) {
+    if (c[id]) toggleSec(id, false);
+    else { const a = document.getElementById('arrow-' + id); if (a) a.textContent = '▼'; }
+  }
+}
+
+// ─── Accent color ─────────────────────────────────────────────────
+function hexRgb(hex) {
+  const h = hex.replace('#', '');
+  return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+}
+function shade(hex, f) {
+  const [r, g, b] = hexRgb(hex);
+  const m = v => Math.max(0, Math.min(255, Math.round(v * f)));
+  return `rgb(${m(r)}, ${m(g)}, ${m(b)})`;
+}
+function applyAccent(hex) {
+  if (!/^#[0-9a-fA-F]{6}$/.test(hex || '')) return;
+  const root = document.documentElement.style;
+  root.setProperty('--accent', hex);
+  root.setProperty('--accent-soft', shade(hex, 1.35));
+  root.setProperty('--accent-glow', hex + '40');
+  root.setProperty('--accent-gradient', `linear-gradient(135deg, ${hex}, ${shade(hex, 0.5)})`);
+  const p = document.getElementById('accent-picker');
+  if (p && p.value.toLowerCase() !== hex.toLowerCase()) p.value = hex;
+  try { localStorage.setItem('tr_accent', hex); } catch {}
+}
+function resetAccent() {
+  try { localStorage.removeItem('tr_accent'); } catch {}
+  location.reload();
+}
+try {
+  const a = localStorage.getItem('tr_accent');
+  if (a) applyAccent(a);
+  else { const p = document.getElementById('accent-picker'); if (p && getComputedStyle(document.documentElement).getPropertyValue('--accent').trim().startsWith('#')) p.value = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim(); }
+} catch {}
+
+// ─── Web UI language (ar/en) ─────────────────────────────────────
+const I18N = {
+  sec_apps: ['☠️ التطبيقات / Apps', '☠️ Apps'],
+  sec_startup: ['🔥 بدء التشغيل / Startup', '🔥 Startup'],
+  sec_tg: ['🤖 التيليغرام / Telegram', '🤖 Telegram'],
+  click_expand: ['(اضغط للتمديد / Click to expand)', '(Click to expand)'],
+  sec_shot: ['📸 الشاشة / Screenshot', '📸 Screenshot'],
+  sec_send: ['📤 إرسال للتيليجرام / Send to Telegram', '📤 Send to Telegram'],
+  sec_sched: ['⏰ المجدول / Scheduler', '⏰ Scheduler'],
+  sched_hint: ['شغّل تطبيقاً بعد مدة — يبقى حتى بعد إعادة التشغيل / Run an app later — survives restarts', 'Run an app later — survives restarts'],
+  sched_add: ['جدولة / Schedule', 'Schedule'],
+  sched_min: ['الدقائق / Minutes', 'Minutes'],
+  sec_hist: ['🕘 السجل / History', '🕘 History'],
+  hist_clear: ['مسح السجل / Clear', 'Clear history'],
+  sec_backup: ['💾 النسخ الاحتياطي / Backup', '💾 Backup'],
+  backup_export: ['تصدير / Export', 'Export'],
+  backup_import: ['استيراد / Import', 'Import'],
+  backup_hint: ['الاستيراد يحفظ نسخة من الحالي في config.backup.json أولاً / Import backs up current to config.backup.json first', 'Import backs up current to config.backup.json first'],
+  sec_quick: ['⚡ إجراءات سريعة / Quick actions', '⚡ Quick actions'],
+  sec_running: ['🟢 المشتغلة / Running', '🟢 Running'],
+  running_hint: ['تطبيقات تعمل الآن (أوامر + بدء تلقائي) — أوقف أياً منها / Live apps (commands + startup) — stop any of them', 'Live apps (commands + startup) — stop any of them'],
+  running_empty: ['لا شيء يعمل الآن / Nothing running', 'Nothing running right now'],
+  running_stop: ['إيقاف / Stop', 'Stop'],
+  running_stop_all: ['إيقاف الكل / Stop all', 'Stop all'],
+  running_procs: ['عملية / procs', 'procs'],
+  running_auto: ['تلقائي / auto', 'auto'],
+  running_startup_idle: ['مجدول للإقلاع / on-boot', 'on-boot'],
+  q_lock: ['قفل / Lock', 'Lock'],
+  q_recycle: ['السلة / Recycle', 'Empty recycle'],
+  q_desktop: ['سطح المكتب / Desktop', 'Desktop'],
+  q_taskmgr: ['المهام / Task Mgr', 'Task Mgr'],
+};
+function setWebLang(l) {
+  const lang = l === 'en' ? 'en' : 'ar';
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (I18N[k]) el.textContent = lang === 'en' ? I18N[k][1] : I18N[k][0];
+  });
+  const b = document.getElementById('weblang-btn');
+  if (b) b.textContent = lang === 'en' ? 'عربي' : 'EN';
+  try { localStorage.setItem('tr_weblang', lang); } catch {}
+}
+function toggleWebLang() {
+  let cur = 'ar';
+  try { cur = localStorage.getItem('tr_weblang') || 'ar'; } catch {}
+  setWebLang(cur === 'en' ? 'ar' : 'en');
+}
+try { setWebLang(localStorage.getItem('tr_weblang') || 'ar'); } catch {}
+
+// ─── Scheduler UI ─────────────────────────────────────────────────
+async function refreshSchedApps() {
+  try {
+    const res = await fetch('/api/apps');
+    const apps = await res.json();
+    const sel = document.getElementById('sched-app');
+    sel.innerHTML = apps.map(a => `<option value="${a.id}">${esc(a.name)}</option>`).join('') || '<option value="">—</option>';
+  } catch {}
+}
+function fmtCountdown(sec) {
+  if (sec < 60) return sec + 's';
+  if (sec < 3600) return Math.floor(sec / 60) + 'm';
+  return Math.floor(sec / 3600) + 'h ' + Math.floor((sec % 3600) / 60) + 'm';
+}
+async function loadSchedules() {
+  try {
+    const res = await fetch('/api/schedules');
+    const list = await res.json();
+    const el = document.getElementById('sched-list');
+    if (!list.length) { el.innerHTML = '<div class="empty-msg">لا جدولة / No schedules</div>'; return; }
+    el.innerHTML = list.map(s => `
+      <div class="app-item">
+        <div class="app-number">⏰</div>
+        <div class="app-info">
+          <div class="app-name">${esc(s.appName || '?')}</div>
+          <div class="app-cmd-item">⏳ ${fmtCountdown(s.remainingSec)} — ${esc(new Date(s.runAt).toLocaleString())}</div>
+        </div>
+        <div class="app-actions"><button class="btn btn-del" onclick="delSchedule('${s.id}')">✕</button></div>
+      </div>`).join('');
+  } catch {}
+}
+async function addSchedule() {
+  const appId = document.getElementById('sched-app').value;
+  const mins = Math.max(1, Number(document.getElementById('sched-min').value) || 30);
+  if (!appId) { toast('⚠️ اختر تطبيقاً / Choose an app'); return; }
+  const res = await fetch('/api/schedules', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ appId, afterSeconds: mins * 60 }),
+  });
+  if (res.ok) { toast('⏰ تمت الجدولة / Scheduled'); loadSchedules(); }
+  else { const e = await res.json().catch(() => ({})); toast('❌ فشل / Failed: ' + (e.error || '')); }
+}
+async function delSchedule(id) {
+  await fetch('/api/schedules/' + id, { method: 'DELETE' });
+  loadSchedules();
+  toast('⏰ أُلغيت / Cancelled');
+}
+
+// ─── History UI ───────────────────────────────────────────────────
+async function loadHistory() {
+  try {
+    const res = await fetch('/api/history');
+    const h = await res.json();
+    const el = document.getElementById('hist-list');
+    if (!h.length) { el.innerHTML = '<div class="empty-msg">السجل فارغ / Empty</div>'; return; }
+    el.innerHTML = h.slice(0, 30).map(e => {
+      const d = new Date(e.t);
+      const ts = d.toLocaleDateString() + ' ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+      return `<div class="app-item"><div class="app-number">🕘</div><div class="app-info"><div class="app-name">${esc(e.app)}</div><div class="app-cmd-item">${esc(ts)} — ${esc(e.source)}</div></div></div>`;
+    }).join('');
+  } catch {}
+}
+async function clearHistory() {
+  if (!confirm('مسح السجل؟ / Clear history?')) return;
+  await fetch('/api/history', { method: 'DELETE' });
+  loadHistory();
+}
+
+// ─── Backup UI ────────────────────────────────────────────────────
+async function importBackup() {
+  const inp = document.getElementById('restore-file');
+  if (!inp.files || !inp.files[0]) { toast('⚠️ اختر ملفاً / Choose a file'); return; }
+  const txt = await inp.files[0].text();
+  let obj;
+  try { obj = JSON.parse(txt); } catch { toast('❌ ملف غير صالح / Invalid file'); return; }
+  if (!obj || !Array.isArray(obj.apps)) { toast('❌ نسخة غير صالحة / Invalid backup'); return; }
+  if (!confirm(`استيراد ${obj.apps.length} تطبيق؟ / Import ${obj.apps.length} apps?`)) return;
+  const res = await fetch('/api/restore', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ config: obj }),
+  });
+  if (res.ok) {
+    toast('✅ تم الاستيراد / Imported');
+    inp.value = '';
+    loadApps(); refreshSchedApps(); loadSchedules(); loadSettings(); loadBotStatus();
+  } else { const e = await res.json().catch(() => ({})); toast('❌ فشل / Failed: ' + (e.error || '')); }
+}
+
+// ─── Quick actions UI ─────────────────────────────────────────────
+async function quickAction(key) {
+  if (key === 'lock' || key === 'recycle') {
+    if (!confirm(key === 'lock' ? 'قفل الحاسوب؟ / Lock PC?' : 'إفراغ السلة؟ / Empty recycle bin?')) return;
+  }
+  const res = await fetch('/api/system/' + key, { method: 'POST' });
+  if (res.ok) { toast('⚡ تم / Done'); loadHistory(); }
+  else toast('❌ فشل / Failed');
+}
+
+function toggleTgSettings(force) {
+  const group = document.getElementById('tg-group');
+  const icon = document.getElementById('tg-collapse-icon');
+  const show = force !== undefined ? force : (group.style.display === 'none');
+  group.style.display = show ? 'block' : 'none';
+  if (icon) icon.textContent = show ? '▼' : '▶';
+}
+
+async function takeScreenshotWeb() {
+  const btn = document.getElementById('shot-btn');
+  const st = document.getElementById('shot-status');
+  btn.disabled = true;
+  btn.style.opacity = '0.6';
+  st.style.display = 'block';
+  st.textContent = '⏳ جاري التقاط شاشة... / Capturing screen...';
+  toast('📸 جاري التقاط شاشة... / Capturing...');
+  try {
+    const res = await fetch('/api/screenshot');
+    if (!res.ok) throw new Error('failed');
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const img = document.getElementById('screen-preview');
+    img.src = url;
+    img.style.display = 'block';
+    st.textContent = '✅ تم الالتقاط / Captured';
+    toast('✅ تم الالتقاط / Captured');
+    setTimeout(() => { st.style.display = 'none'; }, 3000);
+  } catch {
+    st.textContent = '❌ فشل السكرين شوت / Failed';
+    toast('❌ فشل السكرين شوت / Failed');
+  } finally {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  }
+}
+
+let fmCwd = '';
+async function loadFiles(customPath) {
+  const input = document.getElementById('fm-path');
+  if (!input) return;
+  const target = customPath ?? input.value.trim();
+  try {
+    const res = await fetch('/api/files?path=' + encodeURIComponent(target));
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'failed');
+    fmCwd = data.cwd;
+    input.value = data.cwd;
+    const list = document.getElementById('fm-list');
+    const upBtn = data.cwd !== data.parent
+      ? `<div class="app-item" style="cursor:pointer" onclick="loadFiles('${escAttr(data.parent)}')"><div class="app-number">↩</div><div class="app-info"><div class="app-name">.. (أعلى / Up)</div></div></div>` : '';
+    list.innerHTML = upBtn + data.entries.map(e => `
+      <div class="app-item">
+        <div class="app-number">${e.isDir ? '📁' : '📄'}</div>
+        <div class="app-info">
+          <div class="app-name">${esc(e.name)}</div>
+          <div class="app-cmd-item">${e.isDir ? 'مجلد / dir' : (Math.round(e.size / 1024) + ' KB')}</div>
+        </div>
+        <div class="app-actions">
+          ${e.isDir ? `<button class="btn btn-edit" onclick="loadFiles('${escAttr(e.path)}')">فتح</button>`
+                     : `<a class="btn btn-run" href="/api/files/download?path=${encodeURIComponent(e.path)}" style="text-decoration:none">⬇ تحميل</a>
+                        <button class="btn btn-edit" onclick="sendPathToTelegram('${escAttr(e.path)}')" title="إرسال للهاتف / Send to phone">📤</button>`}
+        </div>
+      </div>`).join('') || '<div class="empty-msg">مجلد فارغ / Empty</div>';
+  } catch (e) { toast('❌ فشل فتح المجلد / Failed: ' + (e.message || '')); }
+}
+function escAttr(s) { return String(s || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'"); }
+let dirPickerCwd = '';
+async function openDirPicker() {
+  // Native Windows folder dialog (opened by the server on your screen)
+  const btn = document.getElementById('pick-dir-btn');
+  const hint = document.getElementById('pick-dir-hint');
+  btn.disabled = true;
+  hint.style.display = 'block';
+  toast('📁 نافذة اختيار المجلد مفتوحة على شاشتك... / Pick a folder on your screen...');
+  try {
+    const res = await fetch('/api/files/pick-folder', { method: 'POST' });
+    const d = await res.json().catch(() => ({}));
+    if (res.ok && d.path) {
+      document.getElementById('tg-downdir').value = d.path;
+      toast('📁 تم الاختيار — اضغط حفظ الإعدادات / Selected — press Save');
+    } else if (d.cancelled) {
+      toast('❌ أُلغي الاختيار / Cancelled');
+    } else {
+      toast('❌ فشل / Failed: ' + (d.error || ''));
+    }
+  } catch (e) { toast('❌ فشل / Failed'); }
+  finally { btn.disabled = false; hint.style.display = 'none'; }
+}
+function pickThisDir() {
+  // reserved (native dialog is used instead)
+}
+async function uploadFile() {
+  const inp = document.getElementById('fm-upload');
+  if (!inp) return;
+  if (!inp.files || !inp.files[0]) { toast('⚠️ اختر ملفاً أولاً / Choose a file'); return; }
+  const f = inp.files[0];
+  if (f.size > 25 * 1024 * 1024) { toast('❌ كبير (25MB max) / Too large'); return; }
+  toast('⬆️ جاري الرفع / Uploading...');
+  const buf = await f.arrayBuffer();
+  let bin = '';
+  const bytes = new Uint8Array(buf);
+  for (let i = 0; i < bytes.length; i += 8192) {
+    bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 8192));
+  }
+  const b64 = btoa(bin);
+  const res = await fetch('/api/files/upload', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ dir: fmCwd || document.getElementById('fm-path').value, filename: f.name, contentBase64: b64 }),
+  });
+  if (res.ok) { toast('✅ تم الرفع / Uploaded'); loadFiles(fmCwd); inp.value = ''; }
+  else { const e = await res.json().catch(() => ({})); toast('❌ فشل الرفع / Failed: ' + (e.error || '')); }
+}
+
+const TG_MAX = 45 * 1024 * 1024;
+let tgXhr = null;
+let tgCancelled = false;
+let tgSendId = null;
+
+function newSendId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+function tgProgressUI() {
+  return {
+    box: document.getElementById('tg-send-box'),
+    bar: document.getElementById('tg-send-bar'),
+    pct: document.getElementById('tg-send-pct'),
+    label: document.getElementById('tg-send-label'),
+    err: document.getElementById('tg-send-err'),
+    sendBtn: document.getElementById('tg-send-btn'),
+  };
+}
+function tgShowProgress(label) {
+  const ui = tgProgressUI();
+  ui.box.style.display = 'block';
+  ui.err.style.display = 'none';
+  ui.label.textContent = label;
+  ui.bar.style.width = '0%';
+  ui.pct.textContent = '0%';
+  ui.sendBtn.disabled = true;
+  tgCancelled = false;
+}
+function tgSetProgress(p, label) {
+  const ui = tgProgressUI();
+  const v = Math.max(0, Math.min(100, Math.round(p)));
+  ui.bar.style.width = v + '%';
+  ui.pct.textContent = v + '%';
+  if (label) ui.label.textContent = label;
+}
+function tgShowError(msg) {
+  const ui = tgProgressUI();
+  ui.err.textContent = '❌ ' + msg;
+  ui.err.style.display = 'block';
+  toast('❌ ' + msg);
+}
+function tgFinishOk(msg) {
+  const ui = tgProgressUI();
+  tgSetProgress(100, '✅ ' + msg);
+  toast('✅ ' + msg);
+  ui.sendBtn.disabled = false;
+  setTimeout(() => { ui.box.style.display = 'none'; }, 4000);
+}
+function tgFinishHide() {
+  const ui = tgProgressUI();
+  ui.sendBtn.disabled = false;
+  setTimeout(() => { ui.box.style.display = 'none'; }, 4000);
+}
+function cancelTgSend() {
+  tgCancelled = true;
+  if (tgXhr) { try { tgXhr.abort(); } catch {} tgXhr = null; }
+  // True cancel: also abort the server->Telegram forward leg
+  if (tgSendId) {
+    try { fetch('/api/bot/send-file/cancel', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sendId: tgSendId }) }); } catch {}
+  }
+  const ui = tgProgressUI();
+  ui.label.textContent = '⏹ تم إيقاف الإرسال / Cancelled';
+  tgShowError('تم إيقاف الإرسال / Upload cancelled');
+  ui.sendBtn.disabled = false;
+  setTimeout(() => { ui.box.style.display = 'none'; }, 3000);
+}
+function validateTgFile(input) {
+  const f = input.files && input.files[0];
+  if (!f) return true;
+  if (f.size > TG_MAX) {
+    // Stop immediately: clear input + persistent error
+    input.value = '';
+    tgShowProgress('❌ ملف مرفوض / Rejected');
+    tgSetProgress(0);
+    tgShowError(`الملف أكبر من الحد (${(f.size / 1048576).toFixed(1)}MB). الأقصى 45MB — تم إيقاف الإرسال / File exceeds 45MB max — stopped`);
+    tgProgressUI().sendBtn.disabled = false;
+    return false;
+  }
+  tgProgressUI().err.style.display = 'none';
+  return true;
+}
+// Read file as base64 with real read-progress (cancellable)
+function readFileB64(file, onProgress) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onprogress = e => {
+      if (tgCancelled) { try { reader.abort(); } catch {} return;
+      }
+      if (e.lengthComputable) onProgress((e.loaded / e.total) * 40); // read = 0..40%
+    };
+    reader.onerror = () => reject(new Error('read failed'));
+    reader.onabort = () => reject(new Error('cancelled'));
+    reader.onload = () => {
+      if (tgCancelled) return reject(new Error('cancelled'));
+      const dataUrl = reader.result;
+      resolve(dataUrl.slice(dataUrl.indexOf(',') + 1));
+    };
+    reader.readAsDataURL(file);
+  });
+}
+// POST with real upload-progress (cancellable via XHR)
+function postJsonProgress(url, obj, onUploadProgress) {
+  return new Promise((resolve, reject) => {
+    const payload = JSON.stringify(obj);
+    const xhr = new XMLHttpRequest();
+    tgXhr = xhr;
+    xhr.open('POST', url);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.upload.onprogress = e => {
+      if (e.lengthComputable) onUploadProgress(40 + (e.loaded / e.total) * 60); // upload = 40..100%
+    };
+    xhr.onload = () => {
+      tgXhr = null;
+      try { resolve({ status: xhr.status, body: JSON.parse(xhr.responseText || '{}') }); }
+      catch { resolve({ status: xhr.status, body: {} }); }
+    };
+    xhr.onerror = () => { tgXhr = null; reject(new Error('network')); };
+    xhr.onabort = () => { tgXhr = null; reject(new Error('cancelled')); };
+    xhr.send(payload);
+  });
+}
+async function sendFileToTelegram(file) {
+  const inp = document.getElementById('tg-file');
+  const f = file || (inp.files && inp.files[0]);
+  if (!f) { toast('⚠️ اختر ملفاً أولاً / Choose a file'); return; }
+  if (f.size > TG_MAX) {
+    inp.value = '';
+    tgShowProgress('❌ ملف مرفوض / Rejected');
+    tgSetProgress(0);
+    tgShowError(`الملف أكبر من الحد (${(f.size / 1048576).toFixed(1)}MB). الأقصى 45MB — تم إيقاف الإرسال / Exceeds 45MB — stopped`);
+    tgProgressUI().sendBtn.disabled = false;
+    return;
+  }
+  tgShowProgress(`📖 قراءة الملف... ${f.name} (${Math.round(f.size / 1024)} KB)`);
+  tgSendId = newSendId();
+  try {
+    const b64 = await readFileB64(f, p => tgSetProgress(p, `📖 قراءة الملف... ${Math.round(p * 2.5)}%`));
+    if (tgCancelled) return;
+    tgSetProgress(40, `📤 إرسال إلى هاتفك... ${f.name}`);
+    const { status, body } = await postJsonProgress('/api/bot/send-file',
+      { sendId: tgSendId, filename: f.name, contentBase64: b64, caption: `📄 ${f.name}` },
+      p => tgSetProgress(p, `📤 إرسال... ${Math.round(p)}%`));
+    if (tgCancelled) return;
+    if (status >= 200 && status < 300) { tgFinishOk('أُرسل إلى هاتفك / Sent to your phone'); inp.value = ''; }
+    else { tgShowError('فشل الإرسال / Failed: ' + (body.error || status)); tgFinishHide(); }
+  } catch (e) {
+    if (tgCancelled || (e && e.message === 'cancelled')) return; // cancelTgSend already reported
+    tgShowError('فشل الإرسال / Failed'); tgFinishHide();
+  }
+}
+async function sendPathToTelegram(fp) {
+  tgShowProgress('📤 إرسال إلى هاتفك... / Sending...');
+  tgSendId = newSendId();
+  try {
+    const { status, body } = await postJsonProgress('/api/bot/send-file',
+      { sendId: tgSendId, path: fp },
+      p => tgSetProgress(p, `📤 إرسال... ${Math.round(p)}%`));
+    if (tgCancelled) return;
+    if (status >= 200 && status < 300) tgFinishOk('أُرسل إلى هاتفك / Sent');
+    else { tgShowError('فشل الإرسال / Failed: ' + (body.error || status)); tgFinishHide(); }
+  } catch (e) {
+    if (tgCancelled || (e && e.message === 'cancelled')) return;
+    tgShowError('فشل الإرسال / Failed'); tgFinishHide();
+  }
+}
+(function initDrop() {
+  const z = document.getElementById('tg-drop');
+  if (!z) return;
+  ['dragover', 'dragenter'].forEach(ev => z.addEventListener(ev, e => { e.preventDefault(); z.style.borderColor = 'var(--accent)'; z.style.background = 'var(--accent-glow)'; }));
+  ['dragleave', 'drop'].forEach(ev => z.addEventListener(ev, e => { e.preventDefault(); z.style.background = ''; }));
+  z.addEventListener('drop', e => {
+    const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (!f) return;
+    if (f.size > TG_MAX) {
+      tgShowProgress('❌ ملف مرفوض / Rejected');
+      tgSetProgress(0);
+      tgShowError(`الملف أكبر من الحد (${(f.size / 1048576).toFixed(1)}MB). الأقصى 45MB — تم إيقاف الإرسال / Exceeds 45MB — stopped`);
+      tgProgressUI().sendBtn.disabled = false;
+      return;
+    }
+    sendFileToTelegram(f);
+  });
+})();
+
+async function loadApps() {
+  const res = await fetch('/api/apps');
+  const apps = await res.json();
+  const list = document.getElementById('app-list');
+  if (apps.length === 0) {
+    list.innerHTML = '<div class="empty-msg">لا توجد تطبيقات بعد. أضف من الزر أدناه / No apps yet. Add one below.</div>';
+    return;
+  }
+  list.innerHTML = apps.map((a, i) => {
+    const cmds = a.commands || [];
+    const startupChecked = a.startup ? 'checked' : '';
+    const startupLabel = a.startup ? '🟢' : '⚪';
+    return `
+    <div class="app-item">
+      <div class="app-number">${i + 1}</div>
+      <div class="app-info">
+        <div class="app-name">${esc(a.name)} <span class="cmd-badge">${cmds.length}</span> <span class="shell-badge">${shellIcon(a.shell)}</span></div>
+        <div class="app-cmds">${cmds.map(c => `<div class="app-cmd-item">${esc(c)}</div>`).join('')}</div>
+      </div>
+      <div class="app-actions">
+        <button class="btn btn-edit" onclick="showEditForm('${a.id}')" title="تعديل / Edit">✏️</button>
+        <button class="btn btn-run" onclick="runApp('${a.id}')">▶ تشغيل / Run</button>
+        <label class="switch app-startup-toggle" title="تشغيل تلقائي مع ويندوز / Auto-start with Windows">
+          <input type="checkbox" ${startupChecked} onchange="toggleAppStartup('${a.id}', this.checked)">
+          <span class="slider"></span>
+        </label>
+        <button class="btn btn-del" onclick="deleteApp('${a.id}')">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function confirmAsync(title, desc) {
+  return new Promise(resolve => {
+    const overlay = document.getElementById('confirm-modal');
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-desc').innerHTML = desc;
+    overlay.classList.remove('fade-out');
+    overlay.classList.add('show');
+
+    const cleanup = () => {
+      overlay.classList.remove('show');
+      overlay.classList.add('fade-out');
+      setTimeout(() => overlay.classList.remove('fade-out'), 300);
+    };
+
+    document.getElementById('modal-confirm').onclick = () => { cleanup(); resolve(true); };
+    document.getElementById('modal-reject').onclick = () => { cleanup(); resolve(false); };
+    overlay.onclick = (e) => { if (e.target === overlay) { cleanup(); resolve(false); } };
+  });
+}
+
+async function runApp(id) {
+  const appsRes = await fetch('/api/apps');
+  const apps = await appsRes.json();
+  const app = apps.find(a => a.id === id);
+  if (app && app.commands && app.commands.some(c => {
+    const low = c.toLowerCase();
+    return low.includes('shutdown') || low.includes('stop-computer') || low.includes('restart-computer');
+  })) {
+    const ok = await confirmAsync(
+      '⚠️ أمر حساس / Sensitive Command',
+      'هذا الأمر سيعيد تشغيل الحاسوب أو يغلقه!<br>This will restart or shutdown your computer!'
+    );
+    if (!ok) { toast('❌ تم الإلغاء / Cancelled'); return; }
+  }
+  const res = await fetch('/api/apps/' + id + '/run', { method: 'POST' });
+  if (res.ok) {
+    const data = await res.json();
+    toast('✅ تم تشغيل ' + data.count + ' أمر / Running ' + data.count + ' command(s)');
+    loadHistory();
+  } else {
+    toast('❌ فشل التشغيل / Run failed');
+  }
+}
+
+async function deleteApp(id) {
+  if (!confirm('حذف هذا التطبيق؟ / Delete this app?')) return;
+  await fetch('/api/apps/' + id, { method: 'DELETE' });
+  loadApps();
+  refreshSchedApps();
+  toast('🗑️ تم الحذف / Deleted');
+}
+
+function showAddForm() {
+  document.getElementById('edit-id').value = '';
+  document.getElementById('form-title').innerHTML = '✏️ إضافة تطبيق / Add App';
+  document.getElementById('form-save-btn').textContent = '💾 حفظ / Save';
+  document.getElementById('form-panel').classList.add('show');
+  document.getElementById('new-name').value = '';
+  document.getElementById('new-shell').value = 'cmd';
+  const container = document.getElementById('cmd-fields-container');
+  container.innerHTML = '';
+  addCmdField('');
+}
+
+async function showEditForm(id) {
+  const res = await fetch('/api/apps');
+  const apps = await res.json();
+  const app = apps.find(a => a.id === id);
+  if (!app) { toast('❌ التطبيق غير موجود / App not found'); return; }
+
+  document.getElementById('edit-id').value = id;
+  document.getElementById('form-title').innerHTML = '✏️ تعديل / Edit App';
+  document.getElementById('form-save-btn').textContent = '💾 حفظ التعديلات / Save Changes';
+  document.getElementById('new-name').value = app.name || '';
+
+  document.getElementById('new-shell').value = app.shell || 'cmd';
+  const container = document.getElementById('cmd-fields-container');
+  container.innerHTML = '';
+  const cmds = app.commands || [];
+  cmds.forEach(cmd => addCmdField(cmd));
+  if (cmds.length === 0) addCmdField('');
+
+  document.getElementById('form-panel').classList.add('show');
+  document.getElementById('form-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function hideAddForm() {
+  document.getElementById('form-panel').classList.remove('show');
+}
+
+function shellIcon(shell) {
+  const icons = { cmd: '💻', powershell: '🪟', gitbash: '🐧' };
+  const cls = shell || 'cmd';
+  return `<span class="shell-badge ${cls}">${icons[cls] || '💻'} ${cls}</span>`;
+}
+
+function addCmdField(value) {
+  const container = document.getElementById('cmd-fields-container');
+  const idx = container.querySelectorAll('.cmd-field').length + 1;
+  const div = document.createElement('div');
+  div.className = 'cmd-field';
+  div.innerHTML = `
+    <div class="cmd-field-header">
+      <label>الأمر ${idx} / Command ${idx}</label>
+      <button class="cmd-field-remove" onclick="this.closest('.cmd-field').remove()">✕</button>
+    </div>
+    <div class="cmd-field-row">
+      <input class="form-input cmd-input" placeholder="مثال: notepad / e.g. notepad">
+    </div>`;
+  container.appendChild(div);
+  const input = div.querySelector('.cmd-input');
+  if (value !== undefined) input.value = value;
+  input.focus();
+}
+
+async function addApp() {
+  const name = document.getElementById('new-name').value.trim();
+  const shell = document.getElementById('new-shell').value || 'cmd';
+  const inputs = document.querySelectorAll('#cmd-fields-container .cmd-input');
+  const commands = [];
+  inputs.forEach(inp => {
+    const val = inp.value.trim();
+    if (val) commands.push(val);
+  });
+  if (!name || commands.length === 0) {
+    toast('⚠️ الرجاء ملء الاسم والأمر الأول / Please fill name and at least one command');
+    return;
+  }
+
+  const editId = document.getElementById('edit-id').value;
+  const method = editId ? 'PUT' : 'POST';
+  const url = editId ? '/api/apps/' + editId : '/api/apps';
+
+  const res = await fetch(url, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, commands, shell }),
+  });
+  if (res.ok) {
+    const data = await res.json();
+    toast(editId
+      ? '✏️ تم تعديل "' + data.name + '" / Updated'
+      : '✅ تمت إضافة "' + data.name + '" (' + data.commands.length + ' أمر) / Added');
+    hideAddForm();
+    loadApps();
+    refreshSchedApps();
+  } else {
+    toast('❌ فشل الحفظ / Save failed');
+  }
+}
+
+async function loadSettings() {
+  const res = await fetch('/api/settings');
+  const s = await res.json();
+  document.getElementById('tg-token').value = s.has_token ? 'Token set / تم التعيين' : '';
+  document.getElementById('tg-chat').value = s.telegram_chat_id || '';
+  document.getElementById('tg-downdir').value = s.download_dir || '';
+}
+
+async function saveSettings() {
+  const token = document.getElementById('tg-token').value.trim();
+  const chatId = document.getElementById('tg-chat').value.trim();
+  const downdir = document.getElementById('tg-downdir').value.trim();
+  const body = {};
+  if (token && token !== 'Token set / تم التعيين') body.telegram_token = token;
+  if (chatId) body.telegram_chat_id = chatId;
+  if (downdir) body.download_dir = downdir;
+  const res = await fetch('/api/settings', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (res.ok) {
+    const d = await res.json().catch(() => ({}));
+    if (d.download_dir) document.getElementById('tg-downdir').value = d.download_dir;
+    toast('✅ تم حفظ الإعدادات / Settings saved');
+    loadSettings();
+    loadBotStatus();
+  } else {
+    const e = await res.json().catch(() => ({}));
+    toast('❌ فشل الحفظ / Save failed: ' + (e.error || ''));
+  }
+}
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+async function loadBotStatus() {
+  const el = document.getElementById('bot-status-content');
+  try {
+    const res = await fetch('/api/bot/status');
+    const s = await res.json();
+
+    const statusClass = s.is_running ? 'on' : (s.has_token ? 'wait' : 'off');
+    const statusText = s.is_running ? '🟢 متصل / Online' : (s.has_token ? '🟡 قيد التشغيل / Starting' : '🔴 غير مفعل / Off');
+    const botName = s.name || '—';
+    const botUser = s.username ? '@' + s.username : '—';
+
+    el.innerHTML = `
+      <div class="status-cell">
+        <div class="status-label">الحالة / Status</div>
+        <div class="status-value"><span class="status-badge ${statusClass}">${statusText}</span></div>
+      </div>
+      <div class="status-cell">
+        <div class="status-label">اسم البوت / Name</div>
+        <div class="status-value">${esc(botName)}</div>
+      </div>
+      <div class="status-cell">
+        <div class="status-label">اليوزر / Username</div>
+        <div class="status-value ltr">${esc(botUser)}</div>
+      </div>
+      <div class="status-cell">
+        <div class="status-label">التوكن / Token</div>
+        <div class="status-value token-preview ltr">${s.token_preview || 'غير مضبوط / Not set'}</div>
+      </div>
+    `;
+  } catch {
+    el.innerHTML = '<div class="status-cell full" style="text-align:center;color:#f87171;padding:12px 0;">❌ فشل الاتصال / Connection failed</div>';
+  }
+}
+
+async function sendBotMessage() {
+  const chatId = document.getElementById('tg-chat').value.trim();
+  const text = document.getElementById('send-text').value.trim();
+  if (!text) { toast('⚠️ الرجاء كتابة النص / Please enter a message'); return; }
+  if (!chatId) { toast('⚠️ عيّن Chat ID في الإعدادات أولاً / Set Chat ID in settings first'); return; }
+  const res = await fetch('/api/bot/send', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chat_id: chatId, text }),
+  });
+  if (res.ok) {
+    toast('✅ أُرسلت / Message sent');
+    document.getElementById('send-text').value = '';
+  } else {
+    const err = await res.json();
+    toast('❌ فشل الإرسال / Send failed: ' + (err.error || ''));
+  }
+}
+
+async function toggleAppStartup(id, enabled) {
+  try {
+    const res = await fetch('/api/apps/' + id + '/startup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ enabled }),
+    });
+    if (res.ok) {
+      toast(enabled
+        ? "✅ سيشتغل تلقائياً مع ويندوز / Will auto-start on boot"
+        : "✅ أُوقف التشغيل التلقائي / Auto-start disabled");
+    } else {
+      toast('❌ فشل التعديل / Update failed');
+      loadApps(); // Reload to restore correct state
+    }
+  } catch {
+    toast('❌ فشل الاتصال / Connection failed');
+    loadApps(); // Reload to restore correct state
+  }
+}
+
+async function loadStartupStatus() {
+  try {
+    const res = await fetch('/api/startup');
+    const s = await res.json();
+    document.getElementById('startup-toggle').checked = s.enabled;
+  } catch {}
+}
+
+async function toggleStartup() {
+  const enabled = document.getElementById('startup-toggle').checked;
+  try {
+    const res = await fetch('/api/startup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ enabled }),
+    });
+    if (res.ok) {
+      toast(enabled
+        ? "✅ سيشتغل مع ويندوز / Will start with Windows"
+        : "✅ أُوقف التشغيل التلقائي / Auto-start disabled");
+    } else {
+      document.getElementById('startup-toggle').checked = !enabled;
+      toast('❌ فشل التعديل / Update failed');
+    }
+  } catch {
+    document.getElementById('startup-toggle').checked = !enabled;
+    toast('❌ فشل الاتصال / Connection failed');
+  }
+}
+
+// ─── Running processes UI ─────────────────────────────────────────
+async function loadRunning() {
+  const el = document.getElementById('running-list');
+  if (!el) return;
+  // Skip background refresh while the section is collapsed
+  const body = document.getElementById('body-sec-running');
+  if (body && body.style.display === 'none' && el.dataset.loaded) return;
+  try {
+    const res = await fetch('/api/running');
+    const d = await res.json();
+    el.dataset.loaded = '1';
+    const rows = [];
+    for (const r of (d.running || [])) {
+      rows.push(`
+      <div class="app-item">
+        <div class="app-number">🟢</div>
+        <div class="app-info">
+          <div class="app-name">${esc(r.name)} <span class="cmd-badge">${r.pids.length} ${esc(t('عملية / procs', 'procs'))}</span></div>
+          <div class="app-cmd-item">PID ${r.pids.map(esc).join(' · ')}</div>
+        </div>
+        <div class="app-actions"><button class="btn btn-del" onclick="stopRunning('${escAttr(r.name)}')">⏹ ${esc(t('إيقاف / Stop', 'Stop'))}</button></div>
+      </div>`);
+    }
+    for (const s of (d.startupApps || [])) {
+      if (s.running) continue; // already listed above as live
+      rows.push(`
+      <div class="app-item">
+        <div class="app-number">🚀</div>
+        <div class="app-info">
+          <div class="app-name">${esc(s.name)} <span class="cmd-badge">${esc(t('تلقائي / auto', 'auto'))}</span></div>
+          <div class="app-cmd-item">${esc(t('مجدول للإقلاع / on-boot', 'on-boot'))}</div>
+        </div>
+      </div>`);
+    }
+    el.innerHTML = rows.join('') || `<div class="empty-msg">${esc(t('لا شيء يعمل الآن / Nothing running', 'Nothing running right now'))}</div>`;
+  } catch { /* keep last state on transient failure */ }
+}
+function t(ar, en) {
+  let lang = 'ar';
+  try { lang = localStorage.getItem('tr_weblang') || 'ar'; } catch {}
+  return lang === 'en' ? en : ar;
+}
+async function stopRunning(name) {
+  const res = await fetch('/api/running/stop', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name }),
+  });
+  if (res.ok) { toast('⏹ تم الإيقاف / Stopped: ' + name); loadRunning(); loadHistory(); }
+  else toast('❌ فشل الإيقاف / Stop failed');
+}
+async function stopAllRunning() {
+  let names = [];
+  try {
+    const res = await fetch('/api/running');
+    names = ((await res.json()).running || []).map(r => r.name);
+  } catch {}
+  if (!names.length) { toast('⚪ لا شيء يعمل / Nothing running'); return; }
+  const ok = await confirmAsync('⏹ إيقاف الكل / Stop all', `إيقاف ${names.length} تطبيق؟<br>Stop ${names.length} app(s)?`);
+  if (!ok) return;
+  const res = await fetch('/api/running/stop', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ names }),
+  });
+  if (res.ok) { toast('⏹ تم إيقاف الكل / Stopped all'); loadRunning(); loadHistory(); }
+  else toast('❌ فشل / Failed');
+}
+
+loadApps();
+loadStartupStatus();
+loadSettings();
+loadBotStatus();
+applySecOrder();
+refreshSchedApps();
+loadSchedules();
+loadHistory();
+setInterval(loadSchedules, 30000);
+loadRunning();
+setInterval(loadRunning, 15000);
 </script>
 </body>
 </html>
