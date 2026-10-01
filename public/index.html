@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terminal Control — التحكم بالحاسوب</title>
+<style>
+:root{--bg:#0f1420;--card:#1a2233;--txt:#e8edf5;--mut:#93a0b8;--acc:#4f8cff;--danger:#e5484d;--ok:#30a46c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:Segoe UI,Tahoma,Arial,sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:22px;margin:8px 0 4px}.sub{color:var(--mut);font-size:14px;margin-bottom:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid #26314a;border-radius:14px;padding:20px;text-align:center}
+.card .ic{font-size:36px}.card h3{margin:10px 0 6px;font-size:17px}.card p{color:var(--mut);font-size:13px;min-height:34px}
+button{cursor:pointer;border:0;border-radius:10px;padding:11px 18px;font-size:15px;font-weight:700;color:#fff;background:var(--acc)}
+button.danger{background:var(--danger)}button.ghost{background:transparent;border:1px solid #33415f}
+.set{background:var(--card);border:1px solid #26314a;border-radius:14px;padding:18px;margin-top:18px}
+label{display:block;font-size:13px;color:var(--mut);margin:10px 0 4px}
+input,select{width:100%;padding:10px;border-radius:9px;border:1px solid #33415f;background:#0d1322;color:var(--txt)}
+.row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex}.box{background:var(--card);border-radius:14px;padding:24px;max-width:380px;width:100%;text-align:center}
+.status{margin-top:14px;font-size:13px;color:var(--mut)}
+.top{display:flex;justify-content:space-between;align-items:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div><h1 id="t-title">🖥️ التحكم بالحاسوب</h1><div class="sub" id="t-sub">3 إجراءات ثابتة فقط — بدون أوامر حرة</div></div>
+    <button class="ghost" onclick="toggleLang()" id="langBtn">EN</button>
+  </div>
+  <div class="grid" id="actions"></div>
+  <div class="set">
+    <h3 id="t-set">⚙️ إعدادات تيليجرام</h3>
+    <label>Bot Token</label><input id="token" type="password" placeholder="123456:ABC...">
+    <label>Chat ID</label><input id="chat" inputmode="numeric" placeholder="123456789">
+    <label id="t-lang">اللغة</label>
+    <select id="lang"><option value="ar">العربية</option><option value="en">English</option></select>
+    <div class="row"><button onclick="save()" id="t-save">💾 حفظ وتشغيل البوت</button><span class="status" id="status"></span></div>
+  </div>
+</div>
+<div class="modal" id="modal"><div class="box">
+  <h3 id="m-title"></h3><p class="sub" id="m-sub"></p>
+  <div class="row" style="justify-content:center"><button class="danger" id="m-ok">تأكيد</button><button class="ghost" onclick="closeM()">إلغاء</button></div>
+</div></div>
+<script>
+let LANG='ar', PENDING=null;
+const STR={ar:{restart:'إعادة تشغيل الحاسوب',shutdown:'إطفاء الحاسوب',notepad:'فتح المفكرة',rd:'إعادة التشغيل بعد 3 ثوانٍ',sd:'سيتم الإطفاء فوراً',np:'يفتح نافذة Notepad على الحاسوب',run:'▶ تشغيل',confirmT:'تأكيد الإجراء',confirmS:'هل أنت متأكد؟ لا يمكن التراجع.',confirm:'تأكيد',cancel:'إلغاء',save:'💾 حفظ وتشغيل البوت',done:'✅ تم التنفيذ',saved:'✅ تم الحفظ — البوت يعمل',err:'❌ خطأ في الاتصال'},en:{restart:'Restart PC',shutdown:'Shutdown',notepad:'Open Notepad',rd:'Restarts after 3 seconds',sd:'Powers off immediately',np:'Opens a Notepad window on the PC',run:'▶ Run',confirmT:'Confirm action',confirmS:'Are you sure? This cannot be undone.',confirm:'Confirm',cancel:'Cancel',save:'💾 Save & start bot',done:'✅ Done',saved:'✅ Saved — bot running',err:'❌ Connection error'}};
+const T=k=>STR[LANG][k];
+async function load(){const r=await fetch('/api/actions').then(r=>r.json());const box=document.getElementById('actions');box.innerHTML='';const desc={restart:T('rd'),shutdown:T('sd'),notepad:T('np')};for(const a of r.actions){const d=document.createElement('div');d.className='card';d.innerHTML=`<div class="ic">${a.icon}</div><h3>${LANG==='ar'?a.name_ar:a.name}</h3><p>${desc[a.key]}</p>`;const b=document.createElement('button');b.textContent=T('run');if(a.confirm)b.className='danger';b.onclick=()=>a.confirm?ask(a):doRun(a.key);d.appendChild(b);box.appendChild(d);}const s=await fetch('/api/settings').then(r=>r.json());document.getElementById('chat').value=s.telegram_chat_id||'';document.getElementById('lang').value=s.telegram_lang||'ar';if((s.telegram_lang||'ar')!==LANG){LANG=s.telegram_lang;applyLang();load();}}
+function ask(a){PENDING=a.key;document.getElementById('m-title').textContent=T('confirmT');document.getElementById('m-sub').textContent=(LANG==='ar'?a.name_ar:a.name)+' — '+T('confirmS');document.getElementById('m-ok').textContent=T('confirm');document.getElementById('modal').classList.add('open');}
+function closeM(){document.getElementById('modal').classList.remove('open');PENDING=null;}
+document.getElementById('m-ok').onclick=async()=>{if(PENDING){await doRun(PENDING);}closeM();};
+async function doRun(key){try{await fetch('/api/actions/'+key+'/run',{method:'POST'});flash(T('done'));}catch{flash(T('err'));}}
+async function save(){const body={telegram_chat_id:document.getElementById('chat').value.trim(),telegram_lang:document.getElementById('lang').value};const tk=document.getElementById('token').value.trim();if(tk)body.telegram_token=tk;try{await fetch('/api/settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});LANG=body.telegram_lang;applyLang();flash(T('saved'));}catch{flash(T('err'));}}
+function flash(m){document.getElementById('status').textContent=m;setTimeout(()=>document.getElementById('status').textContent='',3000);}
+function toggleLang(){LANG=LANG==='ar'?'en':'ar';applyLang();load();}
+function applyLang(){document.documentElement.lang=LANG;document.documentElement.dir=LANG==='ar'?'rtl':'ltr';document.getElementById('langBtn').textContent=LANG==='ar'?'EN':'عربي';document.getElementById('t-title').textContent=LANG==='ar'?'🖥️ التحكم بالحاسوب':'🖥️ Terminal Control';document.getElementById('t-sub').textContent=LANG==='ar'?'3 إجراءات ثابتة فقط — بدون أوامر حرة':'Only 3 fixed actions — no free commands';document.getElementById('t-set').textContent=LANG==='ar'?'⚙️ إعدادات تيليجرام':'⚙️ Telegram settings';document.getElementById('t-lang').textContent=LANG==='ar'?'اللغة':'Language';document.getElementById('t-save').textContent=T('save');}
+applyLang();load();
+</script>
+</body>
+</html>

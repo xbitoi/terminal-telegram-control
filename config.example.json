@@ -1,0 +1,5 @@
+{
+  "telegram_token": "123456:PUT-YOUR-BOT-TOKEN-HERE",
+  "telegram_chat_id": "123456789",
+  "telegram_lang": "ar"
+}
